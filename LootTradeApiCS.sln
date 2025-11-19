@@ -1,0 +1,73 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35312.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LootTradeApiCS", "LootTradeApiCS\LootTradeApiCS.csproj", "{47E944B5-B3B4-418A-9AC0-BE03869D8B83}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{8CCBA981-E68D-4ECA-9674-C75B7C3F06AD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{29069F5C-47CF-48CB-A11F-33EA85F8ABCA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dal", "Dal", "{3E248509-63EB-4591-AA89-411454FE6EB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LootTradeServices", "Services\LootTradeServices.csproj", "{B41BF7E3-4D68-4F7A-813B-024776EE6BD0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LootTradeDomainModels", "DomainModels\LootTradeDomainModels.csproj", "{1D304950-811E-467E-A85D-4E75F5B872EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LootTradeDTOs", "DTOs\LootTradeDTOs.csproj", "{7AC4508B-2B5F-4B53-BF7C-46ECF0C52835}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LootTradeInterfaces", "Interfaces\LootTradeInterfaces.csproj", "{63D2AC66-CA22-4B8A-9650-DF6727A58416}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LootTradeRepositories", "LootTradeRepositories\LootTradeRepositories.csproj", "{8897FC53-10F0-49B6-BB21-B465AD37324C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{63D2AC66-CA22-4B8A-9650-DF6727A58416} = {63D2AC66-CA22-4B8A-9650-DF6727A58416}
+		{7AC4508B-2B5F-4B53-BF7C-46ECF0C52835} = {7AC4508B-2B5F-4B53-BF7C-46ECF0C52835}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{47E944B5-B3B4-418A-9AC0-BE03869D8B83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47E944B5-B3B4-418A-9AC0-BE03869D8B83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47E944B5-B3B4-418A-9AC0-BE03869D8B83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47E944B5-B3B4-418A-9AC0-BE03869D8B83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B41BF7E3-4D68-4F7A-813B-024776EE6BD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B41BF7E3-4D68-4F7A-813B-024776EE6BD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B41BF7E3-4D68-4F7A-813B-024776EE6BD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B41BF7E3-4D68-4F7A-813B-024776EE6BD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D304950-811E-467E-A85D-4E75F5B872EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D304950-811E-467E-A85D-4E75F5B872EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D304950-811E-467E-A85D-4E75F5B872EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D304950-811E-467E-A85D-4E75F5B872EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AC4508B-2B5F-4B53-BF7C-46ECF0C52835}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AC4508B-2B5F-4B53-BF7C-46ECF0C52835}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AC4508B-2B5F-4B53-BF7C-46ECF0C52835}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AC4508B-2B5F-4B53-BF7C-46ECF0C52835}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63D2AC66-CA22-4B8A-9650-DF6727A58416}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63D2AC66-CA22-4B8A-9650-DF6727A58416}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63D2AC66-CA22-4B8A-9650-DF6727A58416}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63D2AC66-CA22-4B8A-9650-DF6727A58416}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8897FC53-10F0-49B6-BB21-B465AD37324C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8897FC53-10F0-49B6-BB21-B465AD37324C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8897FC53-10F0-49B6-BB21-B465AD37324C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8897FC53-10F0-49B6-BB21-B465AD37324C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{47E944B5-B3B4-418A-9AC0-BE03869D8B83} = {8CCBA981-E68D-4ECA-9674-C75B7C3F06AD}
+		{B41BF7E3-4D68-4F7A-813B-024776EE6BD0} = {29069F5C-47CF-48CB-A11F-33EA85F8ABCA}
+		{1D304950-811E-467E-A85D-4E75F5B872EC} = {29069F5C-47CF-48CB-A11F-33EA85F8ABCA}
+		{7AC4508B-2B5F-4B53-BF7C-46ECF0C52835} = {29069F5C-47CF-48CB-A11F-33EA85F8ABCA}
+		{63D2AC66-CA22-4B8A-9650-DF6727A58416} = {29069F5C-47CF-48CB-A11F-33EA85F8ABCA}
+		{8897FC53-10F0-49B6-BB21-B465AD37324C} = {3E248509-63EB-4591-AA89-411454FE6EB9}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3FBA8066-2F2A-40C8-BF33-A2B7B57D1006}
+	EndGlobalSection
+EndGlobal

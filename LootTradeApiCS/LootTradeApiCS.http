@@ -1,0 +1,6 @@
+@LootTradeApiCS_HostAddress = http://localhost:5285
+
+GET {{LootTradeApiCS_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
