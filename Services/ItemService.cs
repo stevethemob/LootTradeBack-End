@@ -18,6 +18,7 @@ public class ItemService
         ItemDTO itemDTO = itemRepository.GetItemById(id);
         Item item = new Item();
         item.Id = itemDTO.Id;
+        item.GameId = itemDTO.GameId;
         item.Name = itemDTO.Name;
         item.Description = itemDTO.Description;
         return item;
