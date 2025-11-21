@@ -25,6 +25,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddTransient<GameService>(p =>
+{
+    var gameRepository = p.GetService<IGameRepository>();
+    return new GameService(gameRepository);
+});
+
+builder.Services.AddTransient<IGameRepository>(_ =>
+{
+    return new GameRepository(dbConnString);
+});
+
 builder.Services.AddTransient<ItemService>(p =>
 {
     var itemRepository = p.GetRequiredService<IItemRepository>();
