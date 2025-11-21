@@ -4,6 +4,8 @@ using LootTradeRepositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
+string dbConnString = builder.Configuration.GetConnectionString("conn");
+
 // Add services to the container.
 
 builder.Services.AddCors(options =>
@@ -31,7 +33,7 @@ builder.Services.AddTransient<ItemService>(p =>
 
 builder.Services.AddTransient<IItemRepository>(_ =>
 {
-    return new ItemRepository();
+    return new ItemRepository(dbConnString);
 });
 
 var app = builder.Build();
