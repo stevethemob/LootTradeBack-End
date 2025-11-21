@@ -22,5 +22,23 @@ namespace LootTradeApiCS.Controllers
 
             return Ok(inventory);
         }
+
+        [HttpPost]
+        public IActionResult AddItemToUserTheirInventoryByUserIdAndItemId(int userId, int itemId)
+        {
+            if (itemId == 0 || userId == 0)
+            {
+                return BadRequest("itemId or userId was 0.");
+            }
+
+            bool succes = inventoryService.AddItemToUserTheirInventoryByUserIdAndItemId(userId, itemId);
+
+            if (!succes)
+            {
+                return StatusCode(500, "Failed to add item to inventory.");
+            }
+
+            return Ok("Item was added to inventory.");
+        }
     }
 }

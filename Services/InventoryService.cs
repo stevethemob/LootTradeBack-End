@@ -40,5 +40,10 @@ namespace LootTradeServices
 
             return inventory;
         }
+
+        public bool AddItemToUserTheirInventoryByUserIdAndItemId(int userId, int itemId)
+        {
+            return inventoryRepository.AddItemToUserTheirInventoryByUserIdAndItemId(userId, itemId);
+        }
     }
 }

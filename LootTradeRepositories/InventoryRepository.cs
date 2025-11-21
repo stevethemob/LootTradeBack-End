@@ -47,5 +47,21 @@ namespace LootTradeRepositories
                 return inventory;
             }
         }
+
+        public bool AddItemToUserTheirInventoryByUserIdAndItemId(int userId, int itemId)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connString))
+            {
+                conn.Open();
+                string sqlCommand = "INSERT INTO inventory(itemId, userId) VALUES(@itemId, @userId)";
+                MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
+                cmd.Parameters.AddWithValue("@userId", userId);
+                cmd.Parameters.AddWithValue("@itemId", itemId);
+
+                cmd.ExecuteNonQuery();
+            }
+
+            return true;
+        }
     }
 }

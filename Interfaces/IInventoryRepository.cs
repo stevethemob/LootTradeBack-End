@@ -10,5 +10,7 @@ namespace LootTradeInterfaces
     public interface IInventoryRepository
     {
         public InventoryDTO GetInventoryByUserIdAndGameId(int userId, int gameId);
+
+        public bool AddItemToUserTheirInventoryByUserIdAndItemId(int userId, int itemId);
     }
 }
