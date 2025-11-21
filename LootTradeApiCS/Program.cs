@@ -25,6 +25,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddTransient<UserService>(p =>
+{
+    var userRepository = p.GetService<IUserRepository>();
+    return new UserService(userRepository);
+});
+
+builder.Services.AddTransient<IUserRepository>(_ =>
+{
+    return new UserRepository(dbConnString);
+});
+
 builder.Services.AddTransient<GameService>(p =>
 {
     var gameRepository = p.GetService<IGameRepository>();

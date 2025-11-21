@@ -16,7 +16,7 @@ namespace LootTradeApiCS.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult GetAllGames()
         {
             List<Game> games = new List<Game>();
 
