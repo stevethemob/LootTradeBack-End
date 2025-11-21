@@ -58,6 +58,17 @@ builder.Services.AddTransient<IItemRepository>(_ =>
     return new ItemRepository(dbConnString);
 });
 
+builder.Services.AddTransient<InventoryService>(p =>
+{
+    var inventoryRepository = p.GetRequiredService<IInventoryRepository>();
+    return new InventoryService(inventoryRepository);
+});
+
+builder.Services.AddTransient<IInventoryRepository>(_ =>
+{
+    return new InventoryRepository(dbConnString);
+});
+
 var app = builder.Build();
 
 app.UseCors("AllowFrontend");
