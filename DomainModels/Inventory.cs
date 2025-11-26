@@ -8,6 +8,11 @@ namespace LootTradeDomainModels
 {
     public class Inventory
     {
+        public Inventory()
+        {
+            Items = new List<Item>();
+        }
+
         public List<Item> Items;
     }
 }

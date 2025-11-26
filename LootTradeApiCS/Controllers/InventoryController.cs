@@ -20,7 +20,7 @@ namespace LootTradeApiCS.Controllers
         { 
             Inventory inventory = inventoryService.GetInventoryByUserIdAndGameId(userId, gameId);
 
-            return Ok(inventory);
+            return Ok(inventory.Items);
         }
 
         [HttpPost]

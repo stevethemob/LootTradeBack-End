@@ -8,6 +8,11 @@ namespace LootTradeDTOs
 {
     public class InventoryDTO
     {
+        public InventoryDTO()
+        {
+            Items = new List<ItemDTO>();
+        }
+
         public List<ItemDTO> Items;
     }
 }
