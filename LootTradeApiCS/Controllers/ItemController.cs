@@ -16,17 +16,27 @@ namespace LootTradeApiCS.Controllers
             this.itemService = itemService;
         }
 
-        [HttpGet("{Id}")]
-        public IActionResult GetItemById(int Id)
+        [HttpGet("ByItemId{itemId}")]
+        public IActionResult GetItemById(int itemId)
         {
-            Item item = itemService.GetItemById(Id);
+            Item item = itemService.GetItemById(itemId);
 
             if (item == null)
             {
-                return NotFound("Item with id" + Id + " not found.");
+                return NotFound("Item with id" + itemId + " not found.");
             }
 
             return Ok(item);
+        }
+
+        [HttpGet("ByGame/{gameId}")]
+        public IActionResult GetAllItems(int gameId)
+        {
+            List<Item> items = new List<Item>();
+
+            items = itemService.GetAllItemsByGameId(gameId);
+
+            return Ok(items);
         }
 
         [HttpPost]

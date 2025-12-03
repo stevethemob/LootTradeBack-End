@@ -42,5 +42,33 @@ namespace LootTradeRepositories
         {
             return true;
         }
+
+        public List<ItemDTO> GetAllItemsByGameId(int gameId)
+        {
+            List<ItemDTO> items = new List<ItemDTO>();
+
+            using (MySqlConnection conn = new MySqlConnection(connString))
+            {
+                conn.Open();
+                string sqlCommand = "SELECT * FROM item WHERE gameId = @gameId";
+                MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
+                cmd.Parameters.AddWithValue("@gameId", gameId);
+
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        ItemDTO item = new ItemDTO();
+                        item.Id = reader.GetInt32("id");
+                        item.GameId = reader.GetInt32("gameId");
+                        item.Name = reader.GetString("name");
+                        item.Description = reader.GetString("description");
+                        items.Add(item);
+                    }
+                }
+
+                return items;
+            }
+        }
     }
 }

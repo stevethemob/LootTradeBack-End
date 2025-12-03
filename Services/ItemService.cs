@@ -32,4 +32,23 @@ public class ItemService
 
         return itemRepository.CreateItem(itemDTO);
     }
+
+    public List<Item> GetAllItemsByGameId(int gameId)
+    {
+        List<Item> items = new List<Item>();
+
+        List<ItemDTO> itemDTOs = itemRepository.GetAllItemsByGameId(gameId);
+
+        foreach (ItemDTO itemDTO in itemDTOs)
+        {
+            Item item = new Item();
+            item.Id = itemDTO.Id;
+            item.GameId = itemDTO.GameId;
+            item.Name = itemDTO.Name;
+            item.Description = itemDTO.Description;
+            items.Add(item);
+        }
+
+        return items;
+    }
 }
