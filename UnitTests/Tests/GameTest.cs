@@ -5,7 +5,7 @@ using UnitTests.MockRepositories;
 namespace UnitTests.Tests
 {
     [TestClass]
-    public sealed class GameTest
+    public class GameTest
     {
         [TestMethod]
         public void GetAllGamesTest1Game()
