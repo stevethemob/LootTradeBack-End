@@ -16,7 +16,7 @@ namespace LootTradeApiCS.Controllers
             this.itemService = itemService;
         }
 
-        [HttpGet("ByItemId{itemId}")]
+        [HttpGet("ByItemId/{itemId}")]
         public IActionResult GetItemById(int itemId)
         {
             Item item = itemService.GetItemById(itemId);

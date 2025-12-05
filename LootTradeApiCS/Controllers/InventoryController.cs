@@ -23,7 +23,7 @@ namespace LootTradeApiCS.Controllers
             return Ok(inventory.Items);
         }
 
-        [HttpPost]
+        [HttpPost("{userId}/{itemId}")]
         public IActionResult AddItemToUserTheirInventoryByUserIdAndItemId(int userId, int itemId)
         {
             if (itemId == 0 || userId == 0)

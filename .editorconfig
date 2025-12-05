@@ -1,0 +1,11 @@
+[*.cs]
+# Require 'var' when the type is obvious
+dotnet_style_require_var_for_simple_types = true:warning
+
+# Warn about unused variables
+dotnet_diagnostic.IDE0059.severity = warning
+
+# Enforce naming convention for interfaces
+dotnet_naming_rule.interfaces_should_start_with_i.severity = warning
+dotnet_naming_rule.interfaces_should_start_with_i.symbols = interfaces
+dotnet_naming_rule.interfaces_should_start_with_i.style = begins_with_i
