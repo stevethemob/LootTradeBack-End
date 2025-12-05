@@ -41,7 +41,7 @@ jobs:
         run: |
           dotnet test \
             /p:CollectCoverage=true \
-            /p:CoverletOutput=TestResults/coverage.opencover.xml \
+            /p:CoverletOutput=./TestResults/ \
             /p:CoverletOutputFormat=opencover
 
       - name: Debug coverage files
