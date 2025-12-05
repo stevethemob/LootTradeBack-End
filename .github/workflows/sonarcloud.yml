@@ -40,10 +40,14 @@ jobs:
       - name: Run tests with Coverlet (OpenCover)
         run: |
           dotnet test \
-            --collect:"XPlat Code Coverage" \
             /p:CollectCoverage=true \
             /p:CoverletOutput=TestResults/coverage.opencover.xml \
             /p:CoverletOutputFormat=opencover
+
+      - name: Debug coverage files
+        run: |
+          echo "Searching for coverage files"
+          find . -name "coverage*.xml" -print
 
       - name: End SonarCloud analysis
         run: dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
