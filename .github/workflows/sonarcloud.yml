@@ -1,15 +1,14 @@
-name: SonarQube
+name: Build and Analyze
+
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
-    types: [opened, synchronize, reopened]
 
 jobs:
   build:
-    name: Build and analyze
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -24,24 +23,27 @@ jobs:
       - name: Install SonarScanner
         run: dotnet tool install --global dotnet-sonarscanner
 
-      - name: SonarCloud Begin
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Begin SonarCloud analysis
         run: |
-          dotnet sonarscanner begin `
-            /k:stevethemob_LootTradeBack-End `
-            /o:stevethemob `
-            /d:sonar.host.url="https://sonarcloud.io" `
-            /d:sonar.login="$env:SONAR_TOKEN" `
+          dotnet sonarscanner begin \
+            /k:stevethemob_LootTradeBack-End \
+            /o:stevethemob \
+            /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \
             /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
 
+      - name: Restore dependencies
+        run: dotnet restore
+
       - name: Build
-        run: dotnet build --configuration Release
+        run: dotnet build --no-restore
 
-      - name: Test with coverage
-        run: dotnet test --configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+      - name: Run tests with Coverlet (OpenCover)
+        run: |
+          dotnet test \
+            --collect:"XPlat Code Coverage" \
+            /p:CollectCoverage=true \
+            /p:CoverletOutput=TestResults/coverage.opencover.xml \
+            /p:CoverletOutputFormat=opencover
 
-      - name: SonarCloud End
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: dotnet sonarscanner end /d:sonar.login="$env:SONAR_TOKEN"
+      - name: End SonarCloud analysis
+        run: dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
