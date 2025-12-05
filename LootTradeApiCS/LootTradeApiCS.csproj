@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
 	  <EnableNetAnalyzers>true</EnableNetAnalyzers>
 	  <AnalysisLevel>latest</AnalysisLevel>
+	  <TreatWarningAsErrors>true</TreatWarningAsErrors>
   </PropertyGroup>
 
   <ItemGroup>
