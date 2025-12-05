@@ -6,11 +6,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
 	  <EnableNetAnalyzers>true</EnableNetAnalyzers>
 	  <AnalysisLevel>latest</AnalysisLevel>
-	  <TreatWarningAsErrors>true</TreatWarningAsErrors>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0">
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.100">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
