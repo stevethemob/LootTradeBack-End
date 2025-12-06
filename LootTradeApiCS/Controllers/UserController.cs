@@ -29,15 +29,16 @@ namespace LootTradeApiCS.Controllers
             return Ok(user);
         }
 
-        [HttpPost("{username}/{password}/{repeatedPassword}/{email}")]
-        public IActionResult createUser(string username, string password, string repeatedPassword, string email)
+        [HttpPost("register")]
+        public IActionResult createUser([FromBody] User dto)
         {
             User user = new User();
-            user.Username = username;
-            user.Password = password;
-            user.Email = email;
+            user.Username = dto.Username;
+            user.Password = dto.Password;
+            user.RepeatedPassword = dto.RepeatedPassword;
+            user.Email = dto.Email;
 
-            ValidatorResponse validation = userService.CreateUser(user, repeatedPassword);
+            ValidatorResponse validation = userService.CreateUser(user, user.RepeatedPassword);
 
             if(!validation.Success)
             {
@@ -47,7 +48,7 @@ namespace LootTradeApiCS.Controllers
             return Ok(validation);
         }
 
-        [HttpGet("{username}/{password}")]
+        [HttpGet("login/{username}/{password}")]
         public IActionResult login(string username, string password)
         {
             User user = new User();
