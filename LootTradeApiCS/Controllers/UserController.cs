@@ -38,6 +38,11 @@ namespace LootTradeApiCS.Controllers
 
             ValidatorResponse validation = userService.CreateUser(user, repeatedPassword);
 
+            if(!validation.Success)
+            {
+                return BadRequest(validation);
+            }
+
             return Ok(validation);
         }
     }
