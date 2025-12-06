@@ -31,16 +31,6 @@ namespace LootTradeServices
 
         public ValidatorResponse CreateUser(User user, string repeatedPassword)
         {
-            if (userValidator == null)
-            {
-                throw new Exception("userValidator is null");
-            }
-            if (user == null)
-            {
-                throw new Exception("User is null");
-            }
-
-
             var result = userValidator.Validate(user);
 
             if (!result.IsValid)
@@ -52,7 +42,6 @@ namespace LootTradeServices
                 };
             }
 
-
             UserDTO userDTO = new UserDTO();
             userDTO.Username = user.Username;
             userDTO.Password = user.Password;
@@ -60,12 +49,22 @@ namespace LootTradeServices
 
             userRepository.CreateUser(userDTO);
 
-
             return new ValidatorResponse
             {
                 Success = true,
                 Errors = new List<string>()
             };
+        }
+
+        public int GetUserIdByLogin(User user)
+        {
+            UserDTO userDTO = new UserDTO();
+            userDTO.Username = user.Username;
+            userDTO.Password = user.Password;
+
+            int userId = userRepository.GetUserIdByLogin(userDTO);
+
+            return userId;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using LootTradeDomainModels;
 using LootTradeServices;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Asn1.Mozilla;
 
 namespace LootTradeApiCS.Controllers
 {
@@ -44,6 +45,18 @@ namespace LootTradeApiCS.Controllers
             }
 
             return Ok(validation);
+        }
+
+        [HttpGet("{username}/{password}")]
+        public IActionResult login(string username, string password)
+        {
+            User user = new User();
+            user.Username = username;
+            user.Password = password;
+
+            int userId = userService.GetUserIdByLogin(user);
+
+            return Ok(userId);
         }
     }
 }

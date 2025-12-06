@@ -55,5 +55,27 @@ namespace LootTradeRepositories
                 cmd.ExecuteNonQuery();
             }
         }
+
+        public int GetUserIdByLogin(UserDTO user)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connString))
+            {
+                conn.Open();
+                string sqlCommand = "SELECT id FROM user WHERE username = @username AND password = @password";
+                MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
+                cmd.Parameters.AddWithValue("@username", user.Username);
+                cmd.Parameters.AddWithValue("@password", user.Password);
+
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        user.Id = reader.GetInt32("id");
+                    }
+                }
+            }
+
+            return user.Id;
+        }
     }
 }
