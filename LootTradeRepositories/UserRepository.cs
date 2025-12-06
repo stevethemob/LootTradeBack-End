@@ -1,6 +1,7 @@
 ﻿using LootTradeDTOs;
 using LootTradeInterfaces;
 using MySql.Data.MySqlClient;
+using MySqlX.XDevAPI.CRUD;
 
 namespace LootTradeRepositories
 {
@@ -37,6 +38,21 @@ namespace LootTradeRepositories
                 }
 
                 return userDTO;
+            }
+        }
+
+        public void CreateUser(UserDTO user)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connString))
+            {
+                conn.Open();
+                string sqlCommand = "INSERT INTO user(username, password, email) VALUES(@username, @password, @email)";
+                MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
+                cmd.Parameters.AddWithValue("@username", user.Username);
+                cmd.Parameters.AddWithValue("@password", user.Password);
+                cmd.Parameters.AddWithValue("@email", user.Email);
+
+                cmd.ExecuteNonQuery();
             }
         }
     }

@@ -1,21 +1,20 @@
-﻿using LootTradeDomainModels;
+﻿using FluentValidation;
+using LootTradeDomainModels;
 using LootTradeDTOs;
 using LootTradeInterfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using LootTradeServices;
 
 namespace LootTradeServices
 {
     public class UserService
     {
         private readonly IUserRepository userRepository;
+        private readonly IValidator<User> userValidator;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, IValidator<User> userValidator)
         {
             this.userRepository = userRepository;
+            this.userValidator = userValidator;
         }
 
         public User GetUserById(int userId)
@@ -28,6 +27,45 @@ namespace LootTradeServices
             user.Email = userDTO.Email;
 
             return user;
+        }
+
+        public ValidatorResponse CreateUser(User user, string repeatedPassword)
+        {
+            if (userValidator == null)
+            {
+                throw new Exception("userValidator is null");
+            }
+            if (user == null)
+            {
+                throw new Exception("User is null");
+            }
+
+
+            var result = userValidator.Validate(user);
+
+            if (!result.IsValid)
+            {
+                return new ValidatorResponse
+                {
+                    Success = false,
+                    Errors = result.Errors.Select(e => e.ErrorMessage).ToList()
+                };
+            }
+
+
+            UserDTO userDTO = new UserDTO();
+            userDTO.Username = user.Username;
+            userDTO.Password = user.Password;
+            userDTO.Email = user.Email;
+
+            userRepository.CreateUser(userDTO);
+
+
+            return new ValidatorResponse
+            {
+                Success = true,
+                Errors = new List<string>()
+            };
         }
     }
 }

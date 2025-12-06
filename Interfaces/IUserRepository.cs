@@ -10,5 +10,7 @@ namespace LootTradeInterfaces
     public interface IUserRepository
     {
         public UserDTO GetUserById(int id);
+
+        public void CreateUser(UserDTO user);
     }
 }

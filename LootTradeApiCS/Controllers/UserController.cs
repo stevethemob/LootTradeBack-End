@@ -27,5 +27,18 @@ namespace LootTradeApiCS.Controllers
 
             return Ok(user);
         }
+
+        [HttpPost("{username}/{password}/{repeatedPassword}/{email}")]
+        public IActionResult createUser(string username, string password, string repeatedPassword, string email)
+        {
+            User user = new User();
+            user.Username = username;
+            user.Password = password;
+            user.Email = email;
+
+            ValidatorResponse validation = userService.CreateUser(user, repeatedPassword);
+
+            return Ok(validation);
+        }
     }
 }
