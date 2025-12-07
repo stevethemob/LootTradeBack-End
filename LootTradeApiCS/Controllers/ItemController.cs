@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using LootTradeDomainModels;
 using LootTradeServices;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace LootTradeApiCS.Controllers
 {
@@ -29,9 +31,17 @@ namespace LootTradeApiCS.Controllers
             return Ok(item);
         }
 
+        [Authorize]
         [HttpGet("ByGame/{gameId}")]
         public IActionResult GetAllItems(int gameId)
         {
+            Claim? userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId");
+
+            if (userIdClaim == null)
+            {
+                return Unauthorized("User Id not found in token.");
+            }
+
             List<Item> items = new List<Item>();
 
             items = itemService.GetAllItemsByGameId(gameId);

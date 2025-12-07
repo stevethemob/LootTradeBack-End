@@ -48,16 +48,23 @@ namespace LootTradeApiCS.Controllers
             return Ok(validation);
         }
 
-        [HttpGet("login/{username}/{password}")]
-        public IActionResult login(string username, string password)
+        [HttpPost("login")]
+        public IActionResult login([FromBody] LoginRequest dto, [FromServices] JwtService jwt)
         {
             User user = new User();
-            user.Username = username;
-            user.Password = password;
+            user.Username = dto.Username;
+            user.Password = dto.Password;
 
             int userId = userService.GetUserIdByLogin(user);
 
-            return Ok(userId);
+            if (userId == 0)
+            {
+                return Unauthorized("Invalid username or password");
+            }
+
+            string token = jwt.GenerateToken(userId, dto.Username);
+
+            return Ok(new {token});
         }
     }
 }
