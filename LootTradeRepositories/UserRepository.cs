@@ -41,7 +41,7 @@ namespace LootTradeRepositories
             }
         }
 
-        public void CreateUser(UserDTO user)
+        public bool CreateUser(UserDTO user)
         {
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
@@ -54,6 +54,8 @@ namespace LootTradeRepositories
 
                 cmd.ExecuteNonQuery();
             }
+
+            return true;
         }
 
         public int GetUserIdByLogin(UserDTO user)

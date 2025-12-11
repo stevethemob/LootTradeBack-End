@@ -11,7 +11,7 @@ namespace LootTradeInterfaces
     {
         public UserDTO GetUserById(int id);
 
-        public void CreateUser(UserDTO user);
+        public bool CreateUser(UserDTO user);
 
         public int GetUserIdByLogin(UserDTO user);
     }

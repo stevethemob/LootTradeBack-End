@@ -18,9 +18,7 @@ namespace LootTradeApiCS.Controllers
         [HttpGet]
         public IActionResult GetAllGames()
         {
-            List<Game> games = new List<Game>();
-
-            games = gameService.GetAllGames();
+            List<Game> games = gameService.GetAllGames();
 
             return Ok(games);
         }
