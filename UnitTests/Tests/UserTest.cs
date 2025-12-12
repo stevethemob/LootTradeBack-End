@@ -59,6 +59,7 @@ namespace UnitTests.Tests
             Assert.IsFalse(response.Success);
         }
 
+        [TestMethod]
         public void GetUserIdByLogin()
         {
             UserRepositoryMock userRepositoryMock = new UserRepositoryMock();
