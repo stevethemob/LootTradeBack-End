@@ -30,7 +30,7 @@ jobs:
             /o:stevethemob \
             /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \
             /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" \
-            /d:sonar.coverage.exclusions="LootTradeApiCS/**/*,LootTradeDomainModels/**/*,LootTradeDTOs/**/*,LootTradeInterfaces/**/*"
+            /d:sonar.coverage.exclusions="LootTradeApiCS/**/*,DomainModels/**/*,LootTradeDTOs/**/*,LootTradeInterfaces/**/*"
 
       - name: Restore dependencies
         run: dotnet restore
