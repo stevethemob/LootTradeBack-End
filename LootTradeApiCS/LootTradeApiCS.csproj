@@ -9,6 +9,7 @@
 	  <UserSecretsId>d26f1712-4cd9-4e27-958a-f88c11a72e72</UserSecretsId>
 	  <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 	  <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+	  <ExcludeByFile>**/*</ExcludeByFile>
   </PropertyGroup>
 
   <ItemGroup>
