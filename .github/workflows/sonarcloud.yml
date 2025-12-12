@@ -29,7 +29,7 @@ jobs:
             /k:stevethemob_LootTradeBack-End \
             /o:stevethemob \
             /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \
-            /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
+            /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" \
             /d:sonar.coverage.exclusions="LootTradeApiCS/**/*,LootTradeDomainModels/**/*,LootTradeDTOs/**/*,LootTradeInterfaces/**/*"
 
       - name: Restore dependencies
