@@ -11,19 +11,54 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout backend repository
+        uses: actions/checkout@v4
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: "8.0.x"
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
 
-    - name: Restore dependencies
-      run: dotnet restore
+      - name: Restore dependencies
+        run: dotnet restore
 
-    - name: Build
-      run: dotnet build --no-restore --configuration Release
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
 
-    - name: Run tests
-      run: dotnet test --no-build --configuration Release --verbosity normal
+      - name: Run tests
+        run: dotnet test --no-build --configuration Release --verbosity normal
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout backend repository
+        uses: actions/checkout@v4
+
+      - name: Checkout frontend repository
+        uses: actions/checkout@v4
+        with:
+          repository: stevethemob/loottrade_front-end
+          path: LootTradeApiFrontEnd
+
+      - name: Checkout database repository
+        uses: actions/checkout@v4
+        with:
+          repository: stevethemob/DataDumpsLootTrade
+          path: DataDumpsLootTrade
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker images
+        run: docker-compose build
+
+      - name: Start containers
+        run: docker-compose up -d
+
+      - name: Show running containers
+        run: docker ps
+
+      - name: Tear down containers
+        run: docker-compose down
