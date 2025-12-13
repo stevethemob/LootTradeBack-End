@@ -11,19 +11,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout backend (this repo)
-      - name: Checkout backend repository
+      # 1️⃣ Checkout LootTradeApp FIRST (docker-compose lives here)
+      - name: Checkout LootTradeApp
         uses: actions/checkout@v4
         with:
+          repository: stevethemob/LootTradeApp
+          path: LootTradeApp
+
+      # 2️⃣ Checkout backend INSIDE LootTradeApp
+      - name: Checkout backend
+        uses: actions/checkout@v4
+        with:
+          repository: stevethemob/LootTradeBack-End
           path: LootTradeApp/LootTradeBack-End
 
-            # 2️⃣ Setup .NET
+      # 3️⃣ Setup .NET
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "8.0.x"
 
-      # 3️⃣ Restore & run unit tests
+      # 4️⃣ Restore, build, test backend
       - name: Restore dependencies
         run: dotnet restore
         working-directory: LootTradeApp/LootTradeBack-End
@@ -36,23 +44,15 @@ jobs:
         run: dotnet test --no-build --configuration Release
         working-directory: LootTradeApp/LootTradeBack-End
 
-
-      # 4️⃣ Checkout LootTradeApp (docker-compose)
-      - name: Checkout LootTradeApp
-        uses: actions/checkout@v4
-        with:
-          repository: stevethemob/LootTradeApp
-          path: LootTradeApp
-
-      # 5️⃣ Checkout frontend repo
+      # 5️⃣ Checkout frontend
       - name: Checkout frontend
         uses: actions/checkout@v4
         with:
           repository: stevethemob/loottrade_front-end
           path: LootTradeApp/loottrade_front-end
 
-      # 6️⃣ Checkout database repo
-      - name: Checkout database dump
+      # 6️⃣ Checkout database dump
+      - name: Checkout database
         uses: actions/checkout@v4
         with:
           repository: stevethemob/loottradeDatabaseForCi
@@ -74,7 +74,6 @@ jobs:
       - name: Show running containers
         run: docker ps
 
-      # 9️⃣ Tear down
       - name: Stop containers
         run: docker compose down
         working-directory: LootTradeApp
