@@ -7,23 +7,68 @@ on:
     branches: [ "master" ]
 
 jobs:
-  test:
+  test-and-docker:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout backend (this repo)
       - name: Checkout backend repository
         uses: actions/checkout@v4
 
+      # 2️⃣ Setup .NET
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "8.0.x"
 
+      # 3️⃣ Restore & run unit tests
       - name: Restore dependencies
         run: dotnet restore
 
       - name: Build
         run: dotnet build --no-restore --configuration Release
 
-      - name: Run tests
+      - name: Run unit tests
         run: dotnet test --no-build --configuration Release
+
+      # 4️⃣ Checkout LootTradeApp (docker-compose)
+      - name: Checkout LootTradeApp
+        uses: actions/checkout@v4
+        with:
+          repository: stevethemob/LootTradeApp
+          path: LootTradeApp
+
+      # 5️⃣ Checkout frontend repo
+      - name: Checkout frontend
+        uses: actions/checkout@v4
+        with:
+          repository: stevethemob/loottrade_front-end
+          path: LootTradeApp/loottrade_front-end
+
+      # 6️⃣ Checkout database repo
+      - name: Checkout database dump
+        uses: actions/checkout@v4
+        with:
+          repository: stevethemob/loottradeDatabaseForCi
+          path: LootTradeApp/loottradeDatabaseForCi
+
+      # 7️⃣ Setup Docker
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+
+      # 8️⃣ Run Docker Compose
+      - name: Build Docker images
+        run: docker compose build
+        working-directory: LootTradeApp
+
+      - name: Start Docker containers
+        run: docker compose up -d
+        working-directory: LootTradeApp
+
+      - name: Show running containers
+        run: docker ps
+
+      # 9️⃣ Tear down
+      - name: Stop containers
+        run: docker compose down
+        working-directory: LootTradeApp
