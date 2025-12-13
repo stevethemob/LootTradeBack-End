@@ -17,7 +17,7 @@ jobs:
         with:
           path: LootTradeApp/LootTradeBack-End
 
-      # 2️⃣ Setup .NET
+            # 2️⃣ Setup .NET
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
@@ -26,12 +26,16 @@ jobs:
       # 3️⃣ Restore & run unit tests
       - name: Restore dependencies
         run: dotnet restore
+        working-directory: LootTradeApp/LootTradeBack-End
 
       - name: Build
         run: dotnet build --no-restore --configuration Release
+        working-directory: LootTradeApp/LootTradeBack-End
 
       - name: Run unit tests
         run: dotnet test --no-build --configuration Release
+        working-directory: LootTradeApp/LootTradeBack-End
+
 
       # 4️⃣ Checkout LootTradeApp (docker-compose)
       - name: Checkout LootTradeApp
