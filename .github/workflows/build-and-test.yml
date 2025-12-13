@@ -14,6 +14,8 @@ jobs:
       # 1️⃣ Checkout backend (this repo)
       - name: Checkout backend repository
         uses: actions/checkout@v4
+        with:
+          path: LootTradeApp/LootTradeBack-End
 
       # 2️⃣ Setup .NET
       - name: Setup .NET
