@@ -12,12 +12,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 string dbConnString = builder.Configuration.GetConnectionString("conn");
 
-// 🔹 Add JWT Authentication
+var jwtSection = builder.Configuration.GetSection("Jwt");
+var jwtKey = jwtSection["Key"];
+
+if (string.IsNullOrWhiteSpace(jwtKey))
+{
+    throw new InvalidOperationException("Jwt:Key is missing from configuration.");
+}
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        var jwt = builder.Configuration.GetSection("Jwt");
-
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -25,24 +30,22 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
 
-            ValidIssuer = jwt["Issuer"],
-            ValidAudience = jwt["Audience"],
+            ValidIssuer = jwtSection["Issuer"],
+            ValidAudience = jwtSection["Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(jwt["Key"])
+                Encoding.UTF8.GetBytes(jwtKey)
             )
         };
     });
 
-// CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend",
-        policy =>
-        {
-            policy.WithOrigins("http://localhost:5173")
-                  .AllowAnyHeader()
-                  .AllowAnyMethod();
-        });
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
 });
 
 builder.Services.AddControllers();
@@ -53,48 +56,31 @@ builder.Services.AddScoped<IValidator<User>, UserValidator>();
 
 builder.Services.AddTransient<UserService>(p =>
 {
-    var userRepository = p.GetService<IUserRepository>();
-    var userValidator = p.GetService<IValidator<User>>();
+    var userRepository = p.GetRequiredService<IUserRepository>();
+    var userValidator = p.GetRequiredService<IValidator<User>>();
     return new UserService(userRepository, userValidator);
 });
 
 builder.Services.AddTransient<IUserRepository>(_ =>
-{
-    return new UserRepository(dbConnString);
-});
+    new UserRepository(dbConnString));
 
 builder.Services.AddTransient<GameService>(p =>
-{
-    var gameRepository = p.GetService<IGameRepository>();
-    return new GameService(gameRepository);
-});
+    new GameService(p.GetRequiredService<IGameRepository>()));
 
 builder.Services.AddTransient<IGameRepository>(_ =>
-{
-    return new GameRepository(dbConnString);
-});
+    new GameRepository(dbConnString));
 
 builder.Services.AddTransient<ItemService>(p =>
-{
-    var itemRepository = p.GetRequiredService<IItemRepository>();
-    return new ItemService(itemRepository);
-});
+    new ItemService(p.GetRequiredService<IItemRepository>()));
 
 builder.Services.AddTransient<IItemRepository>(_ =>
-{
-    return new ItemRepository(dbConnString);
-});
+    new ItemRepository(dbConnString));
 
 builder.Services.AddTransient<InventoryService>(p =>
-{
-    var inventoryRepository = p.GetRequiredService<IInventoryRepository>();
-    return new InventoryService(inventoryRepository);
-});
+    new InventoryService(p.GetRequiredService<IInventoryRepository>()));
 
 builder.Services.AddTransient<IInventoryRepository>(_ =>
-{
-    return new InventoryRepository(dbConnString);
-});
+    new InventoryRepository(dbConnString));
 
 builder.Services.AddSingleton<JwtService>();
 
