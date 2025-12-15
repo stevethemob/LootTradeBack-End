@@ -62,25 +62,53 @@ builder.Services.AddTransient<UserService>(p =>
 });
 
 builder.Services.AddTransient<IUserRepository>(_ =>
-    new UserRepository(dbConnString));
+{
+    return new UserRepository(dbConnString);
+});
 
 builder.Services.AddTransient<GameService>(p =>
-    new GameService(p.GetRequiredService<IGameRepository>()));
+{ 
+    var gameRepository = p.GetRequiredService<IGameRepository>();
+    return new GameService(gameRepository);
+});
 
 builder.Services.AddTransient<IGameRepository>(_ =>
-    new GameRepository(dbConnString));
+{
+    return new GameRepository(dbConnString);
+});
 
 builder.Services.AddTransient<ItemService>(p =>
-    new ItemService(p.GetRequiredService<IItemRepository>()));
+{
+    var itemRepository = p.GetRequiredService<IItemRepository>();
+    return new ItemService(itemRepository);
+});
 
 builder.Services.AddTransient<IItemRepository>(_ =>
-    new ItemRepository(dbConnString));
+{
+    return new ItemRepository(dbConnString);
+});
 
 builder.Services.AddTransient<InventoryService>(p =>
-    new InventoryService(p.GetRequiredService<IInventoryRepository>()));
+{
+    var inventoryRepository = p.GetRequiredService<IInventoryRepository>();
+    return new InventoryService(inventoryRepository);
+});
 
 builder.Services.AddTransient<IInventoryRepository>(_ =>
-    new InventoryRepository(dbConnString));
+{
+    return new InventoryRepository(dbConnString);
+});
+
+builder.Services.AddTransient<OfferService>(p =>
+{
+    var offerRepository = p.GetRequiredService<IOfferRepository>();
+    return new OfferService(offerRepository);
+});
+
+builder.Services.AddTransient<IOfferRepository>(_ =>
+{
+    return new OfferRepository(dbConnString);
+});
 
 builder.Services.AddSingleton<JwtService>();
 
