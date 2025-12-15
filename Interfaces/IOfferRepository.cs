@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LootTradeDTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,5 +10,7 @@ namespace LootTradeInterfaces
     public interface IOfferRepository
     {
         public bool AddOffer(int inventoryId);
+
+        public List<OfferDTO> GetAllOffersByGameId(int gameId);
     }
 }

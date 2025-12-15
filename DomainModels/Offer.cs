@@ -8,9 +8,13 @@ namespace LootTradeDomainModels
 {
     public class Offer
     {
+        public Offer()
+        {
+            Item = new Item();
+        }
         public int Id { get; set; }
 
-        public Item Item { get; set; }
+        public Item Item;
 
         public DateTime DateTimeOpen { get; set; }
     }

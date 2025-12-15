@@ -4,19 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LootTradeDTOs
+namespace LootTradeDomainModels
 {
-    public class OfferDTO
+    public class AllOffers
     {
-        public OfferDTO()
-        {
-            Item = new ItemDTO();
-        }
-
         public int Id { get; set; }
 
-        public ItemDTO Item;
-
         public DateTime DateTimeOpen { get; set; }
+
+        public int ItemId { get; set; }
+
+        public string itemName { get; set; }
+
+        public string itemDescription { get; set; }
     }
 }

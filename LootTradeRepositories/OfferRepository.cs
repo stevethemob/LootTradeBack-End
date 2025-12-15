@@ -18,7 +18,7 @@ namespace LootTradeRepositories
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
-                string sqlCommand = "INSERT INTO Offer (inventoryId, dateTimeOpen) VALUES(@inventoryId, @dateTime)";
+                string sqlCommand = "INSERT INTO Offered (inventoryId, dateTimeOpen) VALUES(@inventoryId, @dateTime)";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
                 cmd.Parameters.AddWithValue("@inventoryId", inventoryId);
                 cmd.Parameters.AddWithValue("@dateTime", DateTime.Now);
@@ -27,6 +27,62 @@ namespace LootTradeRepositories
             }
 
             return true;
+        }
+
+        public List<OfferDTO> GetAllOffersByGameId(int gameId)
+        {
+            List<OfferDTO> offers = new List<OfferDTO>();
+
+            using (MySqlConnection conn = new MySqlConnection(connString))
+            {
+                conn.Open();
+                string sqlCommand = "SELECT Offered.id AS offered_id, Offered.dateTimeOpen, Item.id AS item_id, Item.name, Item.description FROM Offered JOIN Inventory ON Inventory.id = Offered.inventoryId JOIN Item ON Item.id = Inventory.itemId JOIN Game ON Game.id = Item.gameId WHERE Game.id = @gameId;";
+                MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
+                cmd.Parameters.AddWithValue("@gameId", gameId);
+
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        OfferDTO offer = new OfferDTO();
+                        offer.Id = reader.GetInt32("offered_id");
+                        offer.DateTimeOpen = reader.GetDateTime("dateTimeOpen");
+                        offer.Item.Id = reader.GetInt32("item_id");
+                        offer.Item.Name = reader.GetString("name");
+                        offer.Item.Description = reader.GetString("description");
+                        offers.Add(offer);
+                    }
+                }
+            }
+
+            return offers;
+        }
+
+        public UserDTO GetUserById(int userId)
+        {
+            UserDTO userDTO = new UserDTO();
+
+            using (MySqlConnection conn = new MySqlConnection(connString))
+            {
+                conn.Open();
+                string sqlCommand = "SELECT * FROM user WHERE id = @userId";
+                MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
+                cmd.Parameters.AddWithValue("@userId", userId);
+
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        userDTO.Id = reader.GetInt32("id");
+                        userDTO.Username = reader.GetString("username");
+                        userDTO.Password = reader.GetString("password");
+                        userDTO.Email = reader.GetString("email");
+                        int roleId = reader.GetInt32("roleId");
+                    }
+                }
+
+                return userDTO;
+            }
         }
     }
 }
