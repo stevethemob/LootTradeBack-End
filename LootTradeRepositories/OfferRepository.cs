@@ -58,16 +58,17 @@ namespace LootTradeRepositories
             return offers;
         }
 
-        public List<OfferDTO> GetOffersBySearch(string searchQuery)
+        public List<OfferDTO> GetOffersBySearchAndGameId(string searchQuery, int gameId)
         {
             List<OfferDTO> offers = new List<OfferDTO>();
 
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
-                string sqlCommand = "SELECT Offered.id as offered_id, Offered.DateTimeOpen, Item.Id AS item_id, Item.Name, Item.description FROM Offered JOIN Inventory ON Inventory.Id = Offered.InventoryId JOIN Item ON Item.id = Inventory.ItemId WHERE item.name LIKE @searchQuery";
+                string sqlCommand = "SELECT Offered.id AS offered_id, Offered.dateTimeOpen, Item.id AS item_id, Item.name, Item.description FROM Offered JOIN Inventory ON Inventory.id = Offered.inventoryId JOIN Item ON Item.id = Inventory.itemId JOIN Game ON Game.id = Item.gameId WHERE Game.id = @gameId AND item.name LIKE @searchQuery;";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
                 cmd.Parameters.AddWithValue("@searchQuery", "%" + searchQuery + "%");
+                cmd.Parameters.AddWithValue("@gameId", gameId);
 
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {

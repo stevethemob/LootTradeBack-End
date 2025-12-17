@@ -48,11 +48,11 @@ namespace LootTradeServices
             return inventoryRepository.GetInventoryIdByUserIdAndItemId(userId, itemId);
         }
 
-        public List<Offer> GetOffersBySearch(string searchQuery)
+        public List<Offer> GetOffersBySearchAndGameId(string searchQuery, int gameId)
         {
             List<Offer> offers = new List<Offer>();
 
-            List<OfferDTO> offerDTOs = offerRepository.GetOffersBySearch(searchQuery);
+            List<OfferDTO> offerDTOs = offerRepository.GetOffersBySearchAndGameId(searchQuery, gameId);
 
             foreach(OfferDTO offerDTO in offerDTOs)
             {

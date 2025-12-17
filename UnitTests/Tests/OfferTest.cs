@@ -36,5 +36,21 @@ namespace UnitTests.Tests
 
             Assert.AreEqual(offers.Count, 2);
         }
+
+        [TestMethod]
+        public void GetAllOffersBySearch()
+        {
+            OfferRepositoryMock offerRepository = new OfferRepositoryMock();
+            InventoryRepositoryMock inventoryRepository = new InventoryRepositoryMock();
+
+            OfferService offerService = new OfferService(offerRepository, inventoryRepository);
+
+            string searchQuery = "e";
+            int gameId = 1;
+
+            List<Offer> offers = offerService.GetOffersBySearchAndGameId(searchQuery, gameId);
+
+            Assert.IsNotNull(offers);
+        }
     }
 }

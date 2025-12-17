@@ -13,6 +13,6 @@ namespace LootTradeInterfaces
 
         public List<OfferDTO> GetAllOffersByGameId(int gameId);
 
-        public List<OfferDTO> GetOffersBySearch(string searchQuery);
+        public List<OfferDTO> GetOffersBySearchAndGameId(string searchQuery, int gameId);
     }
 }

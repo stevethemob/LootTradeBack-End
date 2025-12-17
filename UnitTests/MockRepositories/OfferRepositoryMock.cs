@@ -1,5 +1,6 @@
-﻿using LootTradeInterfaces;
+﻿using LootTradeDomainModels;
 using LootTradeDTOs;
+using LootTradeInterfaces;
 
 namespace UnitTests.MockRepositories
 {
@@ -32,6 +33,23 @@ namespace UnitTests.MockRepositories
 
             offerDTOs.Add(offer1);
             offerDTOs.Add(offer2);
+
+            return offerDTOs;
+        }
+
+        public List<OfferDTO> GetOffersBySearchAndGameId(string searchQuery, int gameId)
+        {
+            List<OfferDTO> offerDTOs = new List<OfferDTO>();
+
+            OfferDTO offer1 = new OfferDTO();
+            offer1.Id = 1;
+            offer1.DateTimeOpen = DateTime.Now;
+            offer1.Item.Id = gameId;
+            offer1.Item.GameId = 1;
+            offer1.Item.Description = "test";
+            offer1.Item.Name = "test";
+
+            offerDTOs.Add(offer1);
 
             return offerDTOs;
         }
