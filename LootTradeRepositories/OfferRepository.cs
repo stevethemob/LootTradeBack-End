@@ -57,5 +57,34 @@ namespace LootTradeRepositories
 
             return offers;
         }
+
+        public List<OfferDTO> GetOffersBySearch(string searchQuery)
+        {
+            List<OfferDTO> offers = new List<OfferDTO>();
+
+            using (MySqlConnection conn = new MySqlConnection(connString))
+            {
+                conn.Open();
+                string sqlCommand = "SELECT Offered.id as offered_id, Offered.DateTimeOpen, Item.Id AS item_id, Item.Name, Item.description FROM Offered JOIN Inventory ON Inventory.Id = Offered.InventoryId JOIN Item ON Item.id = Inventory.ItemId WHERE item.name LIKE @searchQuery";
+                MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
+                cmd.Parameters.AddWithValue("@searchQuery", "%" + searchQuery + "%");
+
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        OfferDTO offer = new OfferDTO();
+                        offer.Id = reader.GetInt32("offered_id");
+                        offer.DateTimeOpen = reader.GetDateTime("dateTimeOpen");
+                        offer.Item.Id = reader.GetInt32("item_id");
+                        offer.Item.Name = reader.GetString("name");
+                        offer.Item.Description = reader.GetString("description");
+                        offers.Add(offer);
+                    }
+                }
+            }
+
+            return offers;
+        }
     }
 }

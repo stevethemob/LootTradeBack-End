@@ -12,5 +12,7 @@ namespace LootTradeInterfaces
         public bool AddOffer(int inventoryId);
 
         public List<OfferDTO> GetAllOffersByGameId(int gameId);
+
+        public List<OfferDTO> GetOffersBySearch(string searchQuery);
     }
 }

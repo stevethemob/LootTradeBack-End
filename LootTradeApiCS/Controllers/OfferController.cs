@@ -66,6 +66,27 @@ namespace LootTradeApiCS.Controllers
 
             return Ok(allOffers);
         }
+
+        [HttpGet("Search/${searchquery}")]
+        public IActionResult SearchOffer(string searchquery)
+        {
+            List<Offer> offers = offerService.GetOffersBySearch(searchquery);
+
+            List<AllOffers> allOffers = new List<AllOffers>();
+
+            foreach (Offer offer in offers)
+            {
+                AllOffers offerForTransfer = new AllOffers();
+                offerForTransfer.Id = offer.Id;
+                offerForTransfer.DateTimeOpen = offer.DateTimeOpen;
+                offerForTransfer.ItemId = offer.Item.Id;
+                offerForTransfer.itemName = offer.Item.Name;
+                offerForTransfer.itemDescription = offer.Item.Description;
+                allOffers.Add(offerForTransfer);
+            }
+
+            return Ok(allOffers);
+        }
     }
 }
 
