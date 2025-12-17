@@ -9,7 +9,7 @@ namespace LootTradeInterfaces
 {
     public interface IOfferRepository
     {
-        public bool AddOffer(int inventoryId);
+        public bool AddOffer(int itemId);
 
         public List<OfferDTO> GetAllOffersByGameId(int gameId);
     }

@@ -63,5 +63,28 @@ namespace LootTradeRepositories
 
             return true;
         }
+
+        public int GetInventoryIdByUserIdAndItemId(int userId, int itemId)
+        {
+            int inventoryId = 0;
+            using (MySqlConnection conn = new MySqlConnection(connString))
+            {
+                conn.Open();
+                string sqlCommand = "SELECT id FROM inventory WHERE userId = @userId AND itemId = @itemId";
+                MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
+                cmd.Parameters.AddWithValue("@userId", userId);
+                cmd.Parameters.AddWithValue("@itemId", itemId);
+
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        inventoryId = reader.GetInt32("id");
+                    }
+                }
+            }
+
+            return inventoryId;
+        }
     }
 }

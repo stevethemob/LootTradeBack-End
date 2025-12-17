@@ -102,7 +102,8 @@ builder.Services.AddTransient<IInventoryRepository>(_ =>
 builder.Services.AddTransient<OfferService>(p =>
 {
     var offerRepository = p.GetRequiredService<IOfferRepository>();
-    return new OfferService(offerRepository);
+    var inventoryRepository = p.GetRequiredService<IInventoryRepository>();
+    return new OfferService(offerRepository, inventoryRepository);
 });
 
 builder.Services.AddTransient<IOfferRepository>(_ =>

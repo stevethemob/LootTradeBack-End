@@ -7,14 +7,17 @@ namespace LootTradeServices
     public class OfferService
     {
         private readonly IOfferRepository offerRepository;
+        private readonly IInventoryRepository inventoryRepository;
 
-        public OfferService(IOfferRepository offerRepository)
+        public OfferService(IOfferRepository offerRepository, IInventoryRepository inventoryRepository)
         {
             this.offerRepository = offerRepository;
+            this.inventoryRepository = inventoryRepository;
         }
 
-        public bool AddOffer(int inventoryId)
+        public bool AddOffer(int userId, int itemId)
         {
+            int inventoryId = GetInventoryIdByUserIdAndItemId(userId, itemId);
             return offerRepository.AddOffer(inventoryId);
         }
 
@@ -38,6 +41,11 @@ namespace LootTradeServices
             }
 
             return offers;
+        }
+
+        private int GetInventoryIdByUserIdAndItemId(int userId, int itemId)
+        {
+            return inventoryRepository.GetInventoryIdByUserIdAndItemId(userId, itemId);
         }
     }
 }

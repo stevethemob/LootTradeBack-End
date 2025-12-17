@@ -1,6 +1,8 @@
-﻿using LootTradeServices;
-using LootTradeDomainModels;
+﻿using LootTradeDomainModels;
+using LootTradeServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace LootTradeApiCS.Controllers
 {
@@ -15,14 +17,24 @@ namespace LootTradeApiCS.Controllers
             this.offerService = offerService;
         }
 
-        [HttpPost("ByInventoryId/{inventoryId}")]
-        public IActionResult CreateOffer(int inventoryId)
+        [Authorize]
+        [HttpPost("ByItemId")]
+        public IActionResult CreateOffer([FromBody]int itemId)
         {
-            bool success = offerService.AddOffer(inventoryId);
+            Claim? userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId");
+
+            if (userIdClaim == null)
+            {
+                return Unauthorized("userId claim missing");
+            }
+
+            int userId = int.Parse(userIdClaim.Value);
+
+            bool success = offerService.AddOffer(userId, itemId);
 
             if (!success)
             {
-                return NotFound("Inventory With id: " + inventoryId + " was not found");
+                return NotFound("Item With id: " + itemId + " was not found");
             }
 
             return Ok();

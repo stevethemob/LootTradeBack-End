@@ -26,5 +26,10 @@ namespace UnitTests.MockRepositories
         {
             return true;
         }
+
+        public int GetInventoryIdByUserIdAndItemId(int userId, int itemId)
+        {
+            return 1;
+        }
     }
 }
