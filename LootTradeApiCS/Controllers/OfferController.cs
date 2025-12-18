@@ -67,7 +67,7 @@ namespace LootTradeApiCS.Controllers
             return Ok(allOffers);
         }
 
-        [HttpGet("Search/${searchquery}/${gameId}")]
+        [HttpGet("Search/{gameId}/{searchQuery}")]
         public IActionResult SearchOffer(string searchquery, int gameId)
         {
             List<Offer> offers = offerService.GetOffersBySearchAndGameId(searchquery, gameId);
