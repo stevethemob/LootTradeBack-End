@@ -6,7 +6,7 @@ namespace LootTradeRepositories
 {
     public class OfferRepository : IOfferRepository
     {
-        string connString = "";
+        readonly string connString = "";
 
         public OfferRepository(string connString)
         {

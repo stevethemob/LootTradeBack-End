@@ -12,7 +12,7 @@ namespace LootTradeRepositories
 {
     public class InventoryRepository : IInventoryRepository
     {
-        string connString = "";
+        readonly string connString = "";
 
         public InventoryRepository(string connString)
         {
