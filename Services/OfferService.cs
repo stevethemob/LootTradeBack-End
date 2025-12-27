@@ -33,9 +33,13 @@ namespace LootTradeServices
 
                 offer.Id = offerDTO.Id;
                 offer.DateTimeOpen = offerDTO.DateTimeOpen;
-                offer.Item.Id = offerDTO.Item.Id;
-                offer.Item.Name = offerDTO.Item.Name;
-                offer.Item.Description = offerDTO.Item.Description;
+                offer.Item = new Item
+                (
+                offerDTO.Item.Id,
+                offerDTO.Item.GameId,
+                offerDTO.Item.Name,
+                offerDTO.Item.Description
+                );
 
                 offers.Add(offer);
             }
@@ -54,14 +58,18 @@ namespace LootTradeServices
 
             List<OfferDTO> offerDTOs = offerRepository.GetOffersBySearchAndGameId(searchQuery, gameId);
 
-            foreach(OfferDTO offerDTO in offerDTOs)
+            foreach (OfferDTO offerDTO in offerDTOs)
             {
                 Offer offer = new Offer();
                 offer.Id = offerDTO.Id;
                 offer.DateTimeOpen = offerDTO.DateTimeOpen;
-                offer.Item.Id = offerDTO.Item.Id;
-                offer.Item.Name = offerDTO.Item.Name;
-                offer.Item.Description = offerDTO.Item.Description;
+                offer.Item = new Item
+                (
+                offerDTO.Item.Id,
+                offerDTO.Item.GameId,
+                offerDTO.Item.Name,
+                offerDTO.Item.Description
+                );
                 offers.Add(offer);
             }
 

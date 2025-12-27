@@ -16,11 +16,13 @@ public class ItemService
     public Item GetItemById(int id)
     {
         ItemDTO itemDTO = itemRepository.GetItemById(id);
-        Item item = new Item();
-        item.Id = itemDTO.Id;
-        item.GameId = itemDTO.GameId;
-        item.Name = itemDTO.Name;
-        item.Description = itemDTO.Description;
+        Item item = new Item
+        (
+        itemDTO.Id,
+        itemDTO.GameId,
+        itemDTO.Name,
+        itemDTO.Description
+        );
         return item;
     }
 
@@ -37,11 +39,13 @@ public class ItemService
 
         foreach (ItemDTO itemDTO in itemDTOs)
         {
-            Item item = new Item();
-            item.Id = itemDTO.Id;
-            item.GameId = itemDTO.GameId;
-            item.Name = itemDTO.Name;
-            item.Description = itemDTO.Description;
+            Item item = new Item
+            (
+            itemDTO.Id,
+            itemDTO.GameId,
+            itemDTO.Name,
+            itemDTO.Description
+            );
             items.Add(item);
         }
 

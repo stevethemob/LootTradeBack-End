@@ -29,11 +29,13 @@ namespace LootTradeServices
 
                 foreach (ItemDTO ItemDTO in inventoryDTO.Items)
                 {
-                    Item item = new Item();
-                    item.Id = ItemDTO.Id;
-                    item.GameId = ItemDTO.GameId;
-                    item.Name = ItemDTO.Name;
-                    item.Description = ItemDTO.Description;
+                    Item item = new Item
+                    (
+                    ItemDTO.Id,
+                    ItemDTO.GameId,
+                    ItemDTO.Name,
+                    ItemDTO.Description
+                    );
                     inventory.Items.Add(item);
                 }
             }

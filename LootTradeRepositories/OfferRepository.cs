@@ -48,8 +48,8 @@ namespace LootTradeRepositories
                         offer.Id = reader.GetInt32("offered_id");
                         offer.DateTimeOpen = reader.GetDateTime("dateTimeOpen");
                         offer.Item = new ItemDTO(
-                            reader.GetInt32("item_id"),
-                            reader.GetInt32("gameId"),
+                        reader.GetInt32("item_id"),
+                        reader.GetInt32("gameId"),
                         reader.GetString("name"),
                         reader.GetString("description")
                         );
