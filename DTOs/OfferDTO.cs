@@ -10,7 +10,7 @@ namespace LootTradeDTOs
     {
         public int Id { get; set; }
 
-        public ItemDTO Item;
+        public ItemDTO Item { get; set; } = null!;
 
         public DateTime DateTimeOpen { get; set; }
     }
