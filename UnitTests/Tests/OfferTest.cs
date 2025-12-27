@@ -34,7 +34,7 @@ namespace UnitTests.Tests
 
             List<Offer> offers = offerService.GetAllOffersByGameId(gameId);
 
-            Assert.AreEqual(offers.Count, 2);
+            Assert.AreEqual(2, offers.Count);
         }
 
         [TestMethod]

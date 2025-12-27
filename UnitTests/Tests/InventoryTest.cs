@@ -18,7 +18,7 @@ namespace UnitTests.Tests
 
             Inventory inventory = inventoryService.GetInventoryByUserIdAndGameId(userId, gameId);
 
-            Assert.AreEqual(inventory.Items.Count, 1);
+            Assert.AreEqual(1, inventory.Items.Count);
         }
 
         [TestMethod]
