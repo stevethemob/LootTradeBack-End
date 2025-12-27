@@ -16,8 +16,6 @@ namespace LootTradeRepositories
 
         public UserDTO GetUserById(int userId)
         {
-            UserDTO userDTO = new UserDTO();
-
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
@@ -27,30 +25,36 @@ namespace LootTradeRepositories
 
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
-                    while (reader.Read())
+                    if (!reader.Read())
                     {
-                        userDTO.Id = reader.GetInt32("id");
-                        userDTO.Username = reader.GetString("username");
-                        userDTO.Password = reader.GetString("password");
-                        userDTO.Email = reader.GetString("email");
-                        int roleId = reader.GetInt32("roleId");
+                        throw new InvalidOperationException("user with id " + userId + " does not exist");
                     }
-                }
 
-                return userDTO;
+                    int id = reader.GetInt32("id");
+                    string username = reader.GetString("username");
+                    string password = reader.GetString("password");
+                    string email = reader.GetString("email");
+                    int roleId = reader.GetInt32("roleId");
+
+                    UserDTO.UserRole role = Enum.IsDefined(typeof(UserDTO.UserRole), roleId)
+                        ? (UserDTO.UserRole)roleId
+                        : throw new InvalidOperationException("Invalid roleId " + roleId);
+
+                    return new UserDTO(id, username, password, email, role);
+                }
             }
         }
 
-        public bool CreateUser(UserDTO user)
+        public bool CreateUser(string username, string password, string email)
         {
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
                 string sqlCommand = "INSERT INTO user(username, password, email) VALUES(@username, @password, @email)";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
-                cmd.Parameters.AddWithValue("@username", user.Username);
-                cmd.Parameters.AddWithValue("@password", user.Password);
-                cmd.Parameters.AddWithValue("@email", user.Email);
+                cmd.Parameters.AddWithValue("@username", username);
+                cmd.Parameters.AddWithValue("@password", password);
+                cmd.Parameters.AddWithValue("@email", email);
 
                 cmd.ExecuteNonQuery();
             }
@@ -58,26 +62,26 @@ namespace LootTradeRepositories
             return true;
         }
 
-        public int GetUserIdByLogin(UserDTO user)
+        public int GetUserIdByLogin(string username, string password)
         {
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
                 string sqlCommand = "SELECT id FROM user WHERE username = @username AND password = @password";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
-                cmd.Parameters.AddWithValue("@username", user.Username);
-                cmd.Parameters.AddWithValue("@password", user.Password);
+                cmd.Parameters.AddWithValue("@username", username);
+                cmd.Parameters.AddWithValue("@password", password);
 
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
-                    while (reader.Read())
+                    if (!reader.Read())
                     {
-                        user.Id = reader.GetInt32("id");
+                        throw new InvalidOperationException("No user found");
                     }
+
+                    return reader.GetInt32("id");
                 }
             }
-
-            return user.Id;
         }
     }
 }

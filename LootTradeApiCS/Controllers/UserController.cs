@@ -30,15 +30,9 @@ namespace LootTradeApiCS.Controllers
         }
 
         [HttpPost("register")]
-        public IActionResult createUser([FromBody] User dto)
+        public IActionResult createUser([FromBody] RegisterRequest dto)
         {
-            User user = new User();
-            user.Username = dto.Username;
-            user.Password = dto.Password;
-            user.RepeatedPassword = dto.RepeatedPassword;
-            user.Email = dto.Email;
-
-            ValidatorResponse validation = userService.CreateUser(user, user.RepeatedPassword);
+            ValidatorResponse validation = userService.CreateUser(dto.Username, dto.Password, dto.Email, dto.RepeatedPassword);
 
             if(!validation.Success)
             {
@@ -51,11 +45,7 @@ namespace LootTradeApiCS.Controllers
         [HttpPost("login")]
         public IActionResult login([FromBody] LoginRequest dto, [FromServices] JwtService jwt)
         {
-            User user = new User();
-            user.Username = dto.Username;
-            user.Password = dto.Password;
-
-            int userId = userService.GetUserIdByLogin(user);
+            int userId = userService.GetUserIdByLogin(dto.Username, dto.Password);
 
             if (userId == 0)
             {

@@ -19,8 +19,8 @@ namespace LootTradeServices
 
         public User GetUserById(int userId)
         {
-            User user = new User();
             UserDTO userDTO = userRepository.GetUserById(userId);
+            User user = new User(userDTO);
             user.Id = userDTO.Id;
             user.Username = userDTO.Username;
             user.Password = userDTO.Password;
@@ -29,8 +29,9 @@ namespace LootTradeServices
             return user;
         }
 
-        public ValidatorResponse CreateUser(User user, string repeatedPassword)
+        public ValidatorResponse CreateUser(string username, string password, string email, string repeatedPassword)
         {
+            User user = new User(username, password, email, User.UserRole.User);
             var result = userValidator.Validate(user);
 
             if (!result.IsValid)
@@ -42,12 +43,7 @@ namespace LootTradeServices
                 };
             }
 
-            UserDTO userDTO = new UserDTO();
-            userDTO.Username = user.Username;
-            userDTO.Password = user.Password;
-            userDTO.Email = user.Email;
-
-            userRepository.CreateUser(userDTO);
+            userRepository.CreateUser(username, password, email);
 
             return new ValidatorResponse
             {
@@ -56,13 +52,10 @@ namespace LootTradeServices
             };
         }
 
-        public int GetUserIdByLogin(User user)
+        public int GetUserIdByLogin(string username, string password)
         {
-            UserDTO userDTO = new UserDTO();
-            userDTO.Username = user.Username;
-            userDTO.Password = user.Password;
 
-            int userId = userRepository.GetUserIdByLogin(userDTO);
+            int userId = userRepository.GetUserIdByLogin(username, password);
 
             return userId;
         }
