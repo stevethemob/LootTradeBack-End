@@ -17,6 +17,8 @@ namespace LootTradeApiCS.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(User), 200)]
+        [ProducesResponseType(typeof(string), 404)]
         public IActionResult GetUserById(int id)
         {   
             User user = userService.GetUserById(id);
@@ -30,6 +32,8 @@ namespace LootTradeApiCS.Controllers
         }
 
         [HttpPost("register")]
+        [ProducesResponseType(typeof(ValidatorResponse), 200)]
+        [ProducesResponseType(typeof(string), 400)]
         public IActionResult createUser([FromBody] RegisterRequest dto)
         {
             ValidatorResponse validation = userService.CreateUser(dto.Username, dto.Password, dto.Email, dto.RepeatedPassword);
@@ -43,6 +47,8 @@ namespace LootTradeApiCS.Controllers
         }
 
         [HttpPost("login")]
+        [ProducesResponseType(typeof(void), 200)]
+        [ProducesResponseType(typeof(string), 401)]
         public IActionResult login([FromBody] LoginRequest dto, [FromServices] JwtService jwt)
         {
             int userId = userService.GetUserIdByLogin(dto.Username, dto.Password);

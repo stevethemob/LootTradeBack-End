@@ -19,6 +19,8 @@ namespace LootTradeApiCS.Controllers
         }
 
         [HttpGet("ByItemId/{itemId}")]
+        [ProducesResponseType(typeof(Item), 200)]
+        [ProducesResponseType(typeof(string), 404)]
         public IActionResult GetItemById(int itemId)
         {
             Item item = itemService.GetItemById(itemId);
@@ -33,6 +35,8 @@ namespace LootTradeApiCS.Controllers
 
         [Authorize]
         [HttpGet("ByGame/{gameId}")]
+        [ProducesResponseType(typeof(List<Item>), 200)]
+        [ProducesResponseType(typeof(string), 401)]
         public IActionResult GetAllItems(int gameId)
         {
             Claim? userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId");
@@ -50,6 +54,9 @@ namespace LootTradeApiCS.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(Item), 201)]
+        [ProducesResponseType(typeof(string), 400)]
+        [ProducesResponseType(typeof(string), 500)]
         public IActionResult createItem([FromBody] Item item)
         {
             if (item == null)

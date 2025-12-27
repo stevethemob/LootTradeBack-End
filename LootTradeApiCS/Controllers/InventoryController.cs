@@ -1,5 +1,6 @@
 ﻿using LootTradeDomainModels;
 using LootTradeServices;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LootTradeApiCS.Controllers
@@ -15,20 +16,21 @@ namespace LootTradeApiCS.Controllers
             this.inventoryService = inventoryService;
         }
 
-        [HttpGet("{userId}/{gameId}")]
+        [HttpPost("{userId}/{itemId}")]
+        [ProducesResponseType(typeof(List<Item>), 200)]
+        [ProducesResponseType(typeof(string), 404)]
         public IActionResult GetInventoryByUserId(int userId, int gameId)
-        { 
+        {
             Inventory inventory = inventoryService.GetInventoryByUserIdAndGameId(userId, gameId);
 
             if (inventory == null)
             {
-                return NotFound("couldn't find invenotry");
+                return NotFound("couldn't find inventory");
             }
 
             return Ok(inventory.Items);
         }
 
-        [HttpPost("{userId}/{itemId}")]
         public IActionResult AddItemToUserTheirInventoryByUserIdAndItemId(int userId, int itemId)
         {
             if (itemId == 0 || userId == 0)

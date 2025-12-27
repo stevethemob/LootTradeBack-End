@@ -19,6 +19,9 @@ namespace LootTradeApiCS.Controllers
 
         [Authorize]
         [HttpPost("ByItemId")]
+        [ProducesResponseType(typeof(void), 200)]
+        [ProducesResponseType(typeof(string), 401)]
+        [ProducesResponseType(typeof(string), 404)]
         public IActionResult CreateOffer([FromBody] int itemId)
         {
             Claim? userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId");
@@ -41,6 +44,8 @@ namespace LootTradeApiCS.Controllers
         }
 
         [HttpGet("ByGameId/{gameId}")]
+        [ProducesResponseType(typeof(AllOffers), 200)]
+        [ProducesResponseType(typeof(string), 400)]
         public IActionResult GetAllOffers(int gameId)
         {
             List<Offer> offers = offerService.GetAllOffersByGameId(gameId);
@@ -69,6 +74,8 @@ namespace LootTradeApiCS.Controllers
         }
 
         [HttpGet("Search/{gameId}/{searchQuery}")]
+        [ProducesResponseType(typeof(AllOffers), 200)]
+        [ProducesResponseType(typeof(string), 404)]
         public IActionResult SearchOffer(string searchquery, int gameId)
         {
             List<Offer> offers = offerService.GetOffersBySearchAndGameId(searchquery, gameId);

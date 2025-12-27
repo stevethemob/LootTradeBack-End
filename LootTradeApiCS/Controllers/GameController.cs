@@ -16,6 +16,8 @@ namespace LootTradeApiCS.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(List<Game>), 200)]
+        [ProducesResponseType(typeof(string), 500)]
         public IActionResult GetAllGames()
         {
             List<Game> games = gameService.GetAllGames();
