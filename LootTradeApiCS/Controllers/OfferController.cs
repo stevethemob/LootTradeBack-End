@@ -19,7 +19,7 @@ namespace LootTradeApiCS.Controllers
 
         [Authorize]
         [HttpPost("ByItemId")]
-        public IActionResult CreateOffer([FromBody]int itemId)
+        public IActionResult CreateOffer([FromBody] int itemId)
         {
             Claim? userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId");
 
@@ -49,13 +49,14 @@ namespace LootTradeApiCS.Controllers
 
             foreach (Offer offer in offers)
             {
-                AllOffers offerForTransfer = new AllOffers();
-
-                offerForTransfer.Id = offer.Id;
-                offerForTransfer.DateTimeOpen = offer.DateTimeOpen;
-                offerForTransfer.ItemId = offer.Item.Id;
-                offerForTransfer.itemName = offer.Item.Name;
-                offerForTransfer.itemDescription = offer.Item.Description;
+                AllOffers offerForTransfer = new AllOffers
+                (
+                offer.Id,
+                offer.DateTimeOpen,
+                offer.Item.Id,
+                offer.Item.Name,
+                offer.Item.Description
+                );
                 allOffers.Add(offerForTransfer);
             }
 
@@ -76,12 +77,14 @@ namespace LootTradeApiCS.Controllers
 
             foreach (Offer offer in offers)
             {
-                AllOffers offerForTransfer = new AllOffers();
-                offerForTransfer.Id = offer.Id;
-                offerForTransfer.DateTimeOpen = offer.DateTimeOpen;
-                offerForTransfer.ItemId = offer.Item.Id;
-                offerForTransfer.itemName = offer.Item.Name;
-                offerForTransfer.itemDescription = offer.Item.Description;
+                AllOffers offerForTransfer = new AllOffers
+                (
+                offer.Id,
+                offer.DateTimeOpen,
+                offer.Item.Id,
+                offer.Item.Name,
+                offer.Item.Description
+                );
                 allOffers.Add(offerForTransfer);
             }
 
