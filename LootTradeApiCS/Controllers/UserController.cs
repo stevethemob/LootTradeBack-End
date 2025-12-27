@@ -1,6 +1,7 @@
 ﻿using LootTradeDomainModels;
 using LootTradeServices;
 using Microsoft.AspNetCore.Mvc;
+using LootTradeApiCSJwtService;
 using Org.BouncyCastle.Asn1.Mozilla;
 
 namespace LootTradeApiCS.Controllers
