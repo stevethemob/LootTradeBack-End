@@ -12,21 +12,17 @@ namespace UnitTests.MockRepositories
     {
         public UserDTO GetUserById(int id)
         {
-            UserDTO user = new UserDTO();
-            user.Id = id;
-            user.Username = "test";
-            user.role = UserDTO.Role.user;
-            user.Email = "test";
-            user.Password = "test";
+            UserDTO user = new UserDTO(id, "test", "test", "test", UserDTO.UserRole.User);
+            
             return user;    
         }
 
-        public bool CreateUser(UserDTO user)
+        public bool CreateUser(string username, string password, string email)
         {
             return true;
         }
 
-        public int GetUserIdByLogin(UserDTO user)
+        public int GetUserIdByLogin(string username, string password)
         {
             return 1;
         }

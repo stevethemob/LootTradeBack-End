@@ -30,13 +30,12 @@ namespace UnitTests.Tests
             UserValidator validator = new UserValidator();
             UserService userService = new UserService(userRepositoryMock, validator);
 
-            User user = new User();
-            user.Username = "usernameForTesting";
-            user.Email = "test@gmail.com";
-            user.Password = "Password1";
+            string username = "usernameForTesting";
+            string email = "test@gmail.com";
+            string password = "Password1";
             string repeatedPassword = "Password1";
 
-            ValidatorResponse response = userService.CreateUser(user, repeatedPassword);
+            ValidatorResponse response = userService.CreateUser(username, password, email, repeatedPassword);
 
             Assert.IsTrue(response.Success);
         }
@@ -48,13 +47,12 @@ namespace UnitTests.Tests
             UserValidator validator = new UserValidator();
             UserService userService = new UserService(userRepositoryMock, validator);
 
-            User user = new User();
-            user.Username = "user";
-            user.Email = "test";
-            user.Password = "password1";
+            string username = "user";
+            string email = "test";
+            string password = "password1";
             string repeatedPassword = "password1";
 
-            ValidatorResponse response = userService.CreateUser(user, repeatedPassword);
+            ValidatorResponse response = userService.CreateUser(username, password, email, repeatedPassword);
 
             Assert.IsFalse(response.Success);
         }
@@ -66,11 +64,10 @@ namespace UnitTests.Tests
             UserValidator validator = new UserValidator();
             UserService userService = new UserService(userRepositoryMock, validator);
 
-            User user = new User();
-            user.Username = "user";
-            user.Password = "test";
+            string username = "user";
+            string password = "test";
 
-            int id = userService.GetUserIdByLogin(user);
+            int id = userService.GetUserIdByLogin(username, password);
 
             Assert.IsNotNull(id);
         }
