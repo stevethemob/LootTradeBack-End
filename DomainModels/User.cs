@@ -15,10 +15,10 @@ namespace LootTradeDomainModels
 
         public User(int id, string username, string password, string email, UserRole role)
         {
-            this.Id = Id;
-            this.Username = Username;
-            this.Password = Password;
-            this.Email = Email;
+            this.Id = id;
+            this.Username = username;
+            this.Password = password;
+            this.Email = email;
             Role = role;
         }
 
