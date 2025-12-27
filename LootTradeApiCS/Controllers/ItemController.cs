@@ -46,9 +46,7 @@ namespace LootTradeApiCS.Controllers
                 return Unauthorized("User Id not found in token.");
             }
 
-            List<Item> items = new List<Item>();
-
-            items = itemService.GetAllItemsByGameId(gameId);
+            List<Item> items = itemService.GetAllItemsByGameId(gameId);
 
             return Ok(items);
         }

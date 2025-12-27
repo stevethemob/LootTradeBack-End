@@ -65,7 +65,7 @@ namespace LootTradeApiCS.Controllers
                 allOffers.Add(offerForTransfer);
             }
 
-            if (allOffers == null || allOffers.Count == 0)
+            if (allOffers.Count == 0)
             {
                 return BadRequest("gameId was not found");
             }
@@ -95,7 +95,7 @@ namespace LootTradeApiCS.Controllers
                 allOffers.Add(offerForTransfer);
             }
 
-            if (allOffers == null)
+            if (allOffers.Count == 0)
             {
                 return NotFound("couldn't find any offers");
             }

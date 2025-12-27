@@ -16,7 +16,7 @@ namespace LootTradeApiCS.Controllers
             this.inventoryService = inventoryService;
         }
 
-        [HttpPost("{userId}/{gameId}")]
+        [HttpGet("{userId}/{gameId}")]
         [ProducesResponseType(typeof(List<Item>), 200)]
         [ProducesResponseType(typeof(string), 404)]
         public IActionResult GetInventoryByUserId(int userId, int gameId)
