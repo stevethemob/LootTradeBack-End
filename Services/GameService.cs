@@ -19,9 +19,11 @@ namespace LootTradeServices
             List<GameDTO> gameDTOs = gameRepository.GetAllGames();
             foreach (GameDTO gameDTO in gameDTOs)
             {
-                Game game = new Game();
-                game.Id = gameDTO.Id;
-                game.Title = gameDTO.Title;
+                Game game = new Game
+                (
+                gameDTO.Id,
+                gameDTO.Title
+                );
                 games.Add(game);
             }
 
