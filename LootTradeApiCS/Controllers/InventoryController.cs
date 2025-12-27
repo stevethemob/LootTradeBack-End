@@ -20,6 +20,11 @@ namespace LootTradeApiCS.Controllers
         { 
             Inventory inventory = inventoryService.GetInventoryByUserIdAndGameId(userId, gameId);
 
+            if (inventory == null)
+            {
+                return NotFound("couldn't find invenotry");
+            }
+
             return Ok(inventory.Items);
         }
 

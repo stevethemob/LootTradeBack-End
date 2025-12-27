@@ -88,6 +88,11 @@ namespace LootTradeApiCS.Controllers
                 allOffers.Add(offerForTransfer);
             }
 
+            if (allOffers == null)
+            {
+                return NotFound("couldn't find any offers");
+            }
+
             return Ok(allOffers);
         }
     }

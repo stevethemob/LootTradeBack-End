@@ -20,6 +20,11 @@ namespace LootTradeApiCS.Controllers
         {
             List<Game> games = gameService.GetAllGames();
 
+            if (games.Count == 0)
+            {
+                return StatusCode(500, "Failed to get all games");
+            }
+
             return Ok(games);
         }
     }
