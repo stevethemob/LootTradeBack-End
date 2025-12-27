@@ -8,7 +8,7 @@ namespace LootTradeApiCS.Controllers
     [Route("[controller]")]
     public class InventoryController : ControllerBase
     {
-        InventoryService inventoryService;
+        readonly InventoryService inventoryService;
 
         public InventoryController(InventoryService inventoryService)
         {

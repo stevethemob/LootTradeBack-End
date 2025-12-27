@@ -10,7 +10,7 @@ namespace LootTradeApiCS.Controllers
     [Route("[controller]")]
     public class OfferController : ControllerBase
     {
-        OfferService offerService;
+        readonly OfferService offerService;
 
         public OfferController(OfferService offerService)
         {

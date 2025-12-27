@@ -9,7 +9,7 @@ namespace LootTradeApiCS.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-        UserService userService;
+        readonly UserService userService;
 
         public UserController(UserService userService)
         {

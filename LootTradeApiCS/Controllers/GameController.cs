@@ -8,7 +8,7 @@ namespace LootTradeApiCS.Controllers
     [Route("[controller]")]
     public class GameController : ControllerBase
     {
-        GameService gameService;
+        readonly GameService gameService;
 
         public GameController(GameService gameService)
         {

@@ -11,7 +11,7 @@ namespace LootTradeApiCS.Controllers
     [Route("[controller]")]
     public class ItemController : ControllerBase
     {
-        ItemService itemService;
+        readonly ItemService itemService;
 
         public ItemController(ItemService itemService)
         {   
