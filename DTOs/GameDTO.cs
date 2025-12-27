@@ -8,6 +8,15 @@ namespace LootTradeDTOs
 {
     public class GameDTO
     {
+        public GameDTO()
+        {
+
+        }
+        public GameDTO(int Id, string Title)
+        {
+            this.Id = Id;
+            this.Title = Title;
+        }
         public int Id { get; set; }
         public string Title { get; set; }
     }

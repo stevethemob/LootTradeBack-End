@@ -27,9 +27,11 @@ namespace LootTradeRepositories
                 {
                     while (reader.Read())
                     {
-                        GameDTO gameDTO = new GameDTO();
-                        gameDTO.Id = reader.GetInt32("id");
-                        gameDTO.Title = reader.GetString("title");
+                        GameDTO gameDTO = new GameDTO
+                        {
+                            Id = reader.GetInt32("id"),
+                            Title = reader.GetString("title")
+                        };
                         gameDTOs.Add(gameDTO);
                     }
                 }
