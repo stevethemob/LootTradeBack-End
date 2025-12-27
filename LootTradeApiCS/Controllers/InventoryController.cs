@@ -16,7 +16,7 @@ namespace LootTradeApiCS.Controllers
             this.inventoryService = inventoryService;
         }
 
-        [HttpPost("{userId}/{itemId}")]
+        [HttpPost("{userId}/{gameId}")]
         [ProducesResponseType(typeof(List<Item>), 200)]
         [ProducesResponseType(typeof(string), 404)]
         public IActionResult GetInventoryByUserId(int userId, int gameId)
@@ -31,6 +31,10 @@ namespace LootTradeApiCS.Controllers
             return Ok(inventory.Items);
         }
 
+        [HttpPost("{userId}/{itemId}")]
+        [ProducesResponseType(typeof(string), 201)]
+        [ProducesResponseType(typeof(string), 400)]
+        [ProducesResponseType(typeof(string), 500)]
         public IActionResult AddItemToUserTheirInventoryByUserIdAndItemId(int userId, int itemId)
         {
             if (itemId == 0 || userId == 0)

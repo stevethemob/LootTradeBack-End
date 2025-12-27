@@ -47,7 +47,7 @@ namespace LootTradeApiCS.Controllers
         }
 
         [HttpPost("login")]
-        [ProducesResponseType(typeof(void), 200)]
+        [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(typeof(string), 401)]
         public IActionResult login([FromBody] LoginRequest dto, [FromServices] JwtService jwt)
         {

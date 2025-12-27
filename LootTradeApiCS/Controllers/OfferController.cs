@@ -44,7 +44,7 @@ namespace LootTradeApiCS.Controllers
         }
 
         [HttpGet("ByGameId/{gameId}")]
-        [ProducesResponseType(typeof(AllOffers), 200)]
+        [ProducesResponseType(typeof(List<AllOffers>), 200)]
         [ProducesResponseType(typeof(string), 400)]
         public IActionResult GetAllOffers(int gameId)
         {
@@ -74,11 +74,11 @@ namespace LootTradeApiCS.Controllers
         }
 
         [HttpGet("Search/{gameId}/{searchQuery}")]
-        [ProducesResponseType(typeof(AllOffers), 200)]
+        [ProducesResponseType(typeof(List<AllOffers>), 200)]
         [ProducesResponseType(typeof(string), 404)]
-        public IActionResult SearchOffer(string searchquery, int gameId)
+        public IActionResult SearchOffer(string searchQuery, int gameId)
         {
-            List<Offer> offers = offerService.GetOffersBySearchAndGameId(searchquery, gameId);
+            List<Offer> offers = offerService.GetOffersBySearchAndGameId(searchQuery, gameId);
 
             List<AllOffers> allOffers = new List<AllOffers>();
 
