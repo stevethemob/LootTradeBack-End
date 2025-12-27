@@ -12,27 +12,15 @@ namespace UnitTests.MockRepositories
     {
         public ItemDTO GetItemById(int id)
         {
-            ItemDTO item = new ItemDTO();
-            item.Id = id;
-            item.GameId = 1;
-            item.Name = "Test";
-            item.Description = "Test";
+            ItemDTO item = new ItemDTO(id, 1 ,"Test", "Test");
             return item;
         }
 
         public List<ItemDTO> GetItems()
         {
             List<ItemDTO> items = new List<ItemDTO>();
-            ItemDTO item1 = new ItemDTO();
-            item1.Id = 1;
-            item1.GameId = 1;
-            item1.Name = "Test";
-            item1.Description = "Test";
-            ItemDTO item2 = new ItemDTO();
-            item2.Id = 2;
-            item2.GameId = 2;
-            item2.Name = "Test2";
-            item2.Description = "Test2";
+            ItemDTO item1 = new ItemDTO(1, 1, "Test", "Test");
+            ItemDTO item2 = new ItemDTO(2, 2, "Test2", "Test2");
             
             items.Add(item1);
             items.Add(item2);
@@ -40,7 +28,7 @@ namespace UnitTests.MockRepositories
             return items;
         }
 
-        public bool CreateItem(ItemDTO item)
+        public bool CreateItem(string itemName, string itemDescription)
         {
             return true;
         }
@@ -48,21 +36,9 @@ namespace UnitTests.MockRepositories
         public List<ItemDTO> GetAllItemsByGameId(int gameId)
         {
             List<ItemDTO> items = new List<ItemDTO>();
-            ItemDTO item1 = new ItemDTO();
-            item1.Id = 1;
-            item1.GameId = gameId;
-            item1.Name = "Test";
-            item1.Description = "Test";
-            ItemDTO item2 = new ItemDTO();
-            item2.Id = 2;
-            item2.GameId = gameId;
-            item2.Name = "Test2";
-            item2.Description = "Test2";
-            ItemDTO item3 = new ItemDTO();
-            item3.Id = 3;
-            item3.GameId = gameId;
-            item3.Name = "Test3";
-            item3.Description = "Test3";
+            ItemDTO item1 = new ItemDTO(1, gameId, "Test", "Test");
+            ItemDTO item2 = new ItemDTO(2, gameId, "Test2", "Test2");
+            ItemDTO item3 = new ItemDTO(3, gameId, "Test3", "Test3");
             items.Add(item1);
             items.Add(item2);
             items.Add(item3);

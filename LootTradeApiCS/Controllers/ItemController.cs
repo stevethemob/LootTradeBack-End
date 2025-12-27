@@ -57,7 +57,7 @@ namespace LootTradeApiCS.Controllers
                 return BadRequest("Item data is required.");
             }
 
-            bool succes = itemService.CreateItem(item);
+            bool succes = itemService.CreateItem(item.Name, item.Description);
 
             if (!succes)
             {

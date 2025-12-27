@@ -24,13 +24,9 @@ public class ItemService
         return item;
     }
 
-    public bool CreateItem(Item item)
+    public bool CreateItem(string itemName, string itemDescription)
     {   
-        ItemDTO itemDTO = new ItemDTO();
-        itemDTO.Name = item.Name;
-        itemDTO.Description = item.Description;
-
-        return itemRepository.CreateItem(itemDTO);
+        return itemRepository.CreateItem(itemName, itemDescription);
     }
 
     public List<Item> GetAllItemsByGameId(int gameId)

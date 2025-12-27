@@ -36,7 +36,7 @@ namespace LootTradeRepositories
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
-                string sqlCommand = "SELECT Offered.id AS offered_id, Offered.dateTimeOpen, Item.id AS item_id, Item.name, Item.description FROM Offered JOIN Inventory ON Inventory.id = Offered.inventoryId JOIN Item ON Item.id = Inventory.itemId JOIN Game ON Game.id = Item.gameId WHERE Game.id = @gameId;";
+                string sqlCommand = "SELECT Offered.id AS offered_id, Offered.dateTimeOpen, Item.id AS item_id, Item.gameId, Item.name, Item.description FROM Offered JOIN Inventory ON Inventory.id = Offered.inventoryId JOIN Item ON Item.id = Inventory.itemId JOIN Game ON Game.id = Item.gameId WHERE Game.id = @gameId;";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
                 cmd.Parameters.AddWithValue("@gameId", gameId);
 
@@ -47,9 +47,12 @@ namespace LootTradeRepositories
                         OfferDTO offer = new OfferDTO();
                         offer.Id = reader.GetInt32("offered_id");
                         offer.DateTimeOpen = reader.GetDateTime("dateTimeOpen");
-                        offer.Item.Id = reader.GetInt32("item_id");
-                        offer.Item.Name = reader.GetString("name");
-                        offer.Item.Description = reader.GetString("description");
+                        offer.Item = new ItemDTO(
+                            reader.GetInt32("item_id"),
+                            reader.GetInt32("gameId"),
+                        reader.GetString("name"),
+                        reader.GetString("description")
+                        );
                         offers.Add(offer);
                     }
                 }
@@ -77,9 +80,12 @@ namespace LootTradeRepositories
                         OfferDTO offer = new OfferDTO();
                         offer.Id = reader.GetInt32("offered_id");
                         offer.DateTimeOpen = reader.GetDateTime("dateTimeOpen");
-                        offer.Item.Id = reader.GetInt32("item_id");
-                        offer.Item.Name = reader.GetString("name");
-                        offer.Item.Description = reader.GetString("description");
+                        offer.Item = new ItemDTO(
+                        reader.GetInt32("item_id"),
+                        gameId,
+                        reader.GetString("name"),
+                        reader.GetString("description")
+                        );
                         offers.Add(offer);
                     }
                 }

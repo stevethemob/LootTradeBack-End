@@ -35,11 +35,13 @@ namespace LootTradeRepositories
                 {
                     while (reader.Read())
                     {
-                        ItemDTO item = new ItemDTO();
-                        item.Id = reader.GetInt32("id");
-                        item.GameId = reader.GetInt32("gameId");
-                        item.Name = reader.GetString("name");
-                        item.Description = reader.GetString("description");
+                        ItemDTO item = new ItemDTO
+                        (
+                        reader.GetInt32("id"),
+                        reader.GetInt32("gameId"),
+                        reader.GetString("name"),
+                        reader.GetString("description")
+                        );
                         inventory.Items.Add(item);
                     }
                 }

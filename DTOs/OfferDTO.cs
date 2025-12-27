@@ -8,11 +8,6 @@ namespace LootTradeDTOs
 {
     public class OfferDTO
     {
-        public OfferDTO()
-        {
-            Item = new ItemDTO();
-        }
-
         public int Id { get; set; }
 
         public ItemDTO Item;

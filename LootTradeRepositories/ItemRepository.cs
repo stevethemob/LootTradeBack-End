@@ -12,33 +12,33 @@ namespace LootTradeRepositories
         {
             this.connString = connString;
         }
-        
+
         public ItemDTO GetItemById(int itemId)
         {
-            ItemDTO item = new ItemDTO();
-
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
+
                 string sqlCommand = "SELECT * FROM item WHERE id = @itemId";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
                 cmd.Parameters.AddWithValue("@itemId", itemId);
 
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
-                    while (reader.Read())
+                    if (!reader.Read())
                     {
-                        item.Id = itemId;
-                        item.GameId = reader.GetInt32("gameId");
-                        item.Name = reader.GetString("name");
-                        item.Description = reader.GetString("description");
+                        throw new InvalidOperationException("Item with id " + itemId + " not found");
                     }
+                    int id = itemId;
+                    int gameId = reader.GetInt32("gameId");
+                    string name = reader.GetString("name");
+                    string description = reader.GetString("description");
+
+                    return new ItemDTO(id, gameId, name, description);
                 }
             }
-
-            return item;
         }
-        public bool CreateItem(ItemDTO itemDTO)
+        public bool CreateItem(string itemName, string ItemDescription)
         {
             return true;
         }
@@ -58,11 +58,13 @@ namespace LootTradeRepositories
                 {
                     while (reader.Read())
                     {
-                        ItemDTO item = new ItemDTO();
-                        item.Id = reader.GetInt32("id");
-                        item.GameId = reader.GetInt32("gameId");
-                        item.Name = reader.GetString("name");
-                        item.Description = reader.GetString("description");
+                        ItemDTO item = new ItemDTO
+                        (
+                        reader.GetInt32("id"),
+                        reader.GetInt32("gameId"),
+                        reader.GetString("name"),
+                        reader.GetString("description")
+                        );
                         items.Add(item);
                     }
                 }

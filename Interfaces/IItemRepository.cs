@@ -5,7 +5,7 @@ namespace LootTradeInterfaces
     public interface IItemRepository
     {
         public ItemDTO GetItemById(int itemId);
-        public bool CreateItem(ItemDTO itemDTO);
+        public bool CreateItem(string itemName, string itemDescription);
 
         public List<ItemDTO> GetAllItemsByGameId(int gameId);
     }
