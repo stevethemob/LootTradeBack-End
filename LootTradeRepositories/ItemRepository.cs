@@ -38,7 +38,7 @@ namespace LootTradeRepositories
                 }
             }
         }
-        public bool CreateItem(string itemName, string ItemDescription)
+        public bool CreateItem(string itemName, string itemDescription)
         {
             return true;
         }
