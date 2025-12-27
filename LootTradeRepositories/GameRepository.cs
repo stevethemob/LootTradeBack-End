@@ -6,7 +6,7 @@ namespace LootTradeRepositories
 {
     public class GameRepository : IGameRepository
     {
-        readonly string connString = "";
+        readonly string connString;
 
         public GameRepository(string connString)
         {

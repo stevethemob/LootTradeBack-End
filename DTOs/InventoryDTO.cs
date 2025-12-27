@@ -13,6 +13,6 @@ namespace LootTradeDTOs
             Items = new List<ItemDTO>();
         }
 
-        public List<ItemDTO> Items;
+        public List<ItemDTO> Items { get; set; }
     }
 }

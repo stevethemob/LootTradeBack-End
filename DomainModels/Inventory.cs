@@ -13,6 +13,6 @@ namespace LootTradeDomainModels
             Items = new List<Item>();
         }
 
-        public List<Item> Items;
+        public List<Item> Items { get; set; }
     }
 }

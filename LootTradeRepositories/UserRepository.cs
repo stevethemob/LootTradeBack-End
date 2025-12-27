@@ -7,7 +7,7 @@ namespace LootTradeRepositories
 {
     public class UserRepository : IUserRepository
     {
-        readonly string connString = "";
+        readonly string connString;
 
         public UserRepository(string connString)
         {
