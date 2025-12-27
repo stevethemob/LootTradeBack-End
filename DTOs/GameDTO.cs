@@ -8,10 +8,6 @@ namespace LootTradeDTOs
 {
     public class GameDTO
     {
-        public GameDTO()
-        {
-
-        }
         public GameDTO(int Id, string Title)
         {
             this.Id = Id;
