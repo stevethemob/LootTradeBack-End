@@ -11,7 +11,8 @@ using LootTradeApiCSJwtService;
 
 var builder = WebApplication.CreateBuilder(args);
 
-string dbConnString = builder.Configuration.GetConnectionString("conn");
+string dbConnString = builder.Configuration.GetConnectionString("conn")
+    ?? throw new InvalidOperationException("Connection string 'conn' is missing.");
 
 var jwtSection = builder.Configuration.GetSection("Jwt");
 var jwtKey = jwtSection["Key"];
@@ -131,4 +132,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+await app.RunAsync();
