@@ -14,9 +14,7 @@ namespace UnitTests.MockRepositories
         {
             List<GameDTO> gameDTOs = new List<GameDTO>();
 
-            GameDTO gameDTO = new GameDTO();
-            gameDTO.Id = 1;
-            gameDTO.Title = "test";
+            GameDTO gameDTO = new GameDTO(1,"test");
             gameDTOs.Add(gameDTO);
 
             return gameDTOs;
