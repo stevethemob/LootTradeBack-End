@@ -60,7 +60,7 @@ jobs:
       - name: Run tests
         run: dotnet test --no-build --configuration Release
         env:
-          MYSQL_HOST: mysql
+          MYSQL_HOST: 127.0.0.1
           MYSQL_PORT: 3306
           MYSQL_USER: loottrade_test
           MYSQL_PASSWORD: testpassword
