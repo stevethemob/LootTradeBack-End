@@ -7,8 +7,8 @@ namespace IntegrationTests.Tests
     [TestClass]
     public class GameRepositoryTests
     {
-        private static MySqlDatabaseFixture fixture;
-        private static GameRepository repo;
+        private static MySqlDatabaseFixture? fixture;
+        private static GameRepository? repo;
 
         [ClassInitialize]
         public static void Setup(TestContext context)
@@ -17,7 +17,7 @@ namespace IntegrationTests.Tests
             repo = new GameRepository(fixture.ConnectionString);
         }
 
-        [ClassCleanup]
+        [ClassCleanup(ClassCleanupBehavior.EndOfClass)]
         public static void Cleanup()
         {
             //fixture?.Dispose(); // prevents NullReferenceException
@@ -26,7 +26,7 @@ namespace IntegrationTests.Tests
         [TestMethod]
         public void GetAllGames_ReturnsSeededGames()
         {
-            var games = repo.GetAllGames();
+            var games = repo!.GetAllGames();
 
             Assert.AreEqual(2, games.Count);
             Assert.IsTrue(games.Exists(g => g.Title == "Game A"));
