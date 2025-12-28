@@ -2,13 +2,28 @@ name: SonarQube
 
 on:
   push:
-    branches:
-      - master
+    branches: [ master ]
   pull_request:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_DATABASE: loottrade_test
+          MYSQL_USER: loottrade_test
+          MYSQL_PASSWORD: testpassword
+          MYSQL_ROOT_PASSWORD: root
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -ptestpassword"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
 
     steps:
       - uses: actions/checkout@v4
@@ -29,26 +44,38 @@ jobs:
             /k:stevethemob_LootTradeBack-End \
             /o:stevethemob \
             /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \
-            /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" \
-            /d:sonar.coverage.exclusions="LootTradeApiCS/**/*,DomainModels/**/*,DTOs/**/*,LootTradeInterfaces/**/*"
+            /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
 
-      - name: Restore dependencies
+      - name: Restore
         run: dotnet restore
 
       - name: Build
         run: dotnet build --no-restore
 
-      - name: Run tests with Coverlet (OpenCover)
+      - name: Wait for MySQL
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mysql-client
+          for i in {1..15}; do
+            mysql -h 127.0.0.1 -P 3306 -u loottrade_test -ptestpassword loottrade_test && break
+            echo "Waiting for MySQL..."
+            sleep 2
+          done
+
+      - name: Run tests with coverage (Unit + Integration)
         run: |
           dotnet test \
             /p:CollectCoverage=true \
             /p:CoverletOutput=./TestResults/ \
             /p:CoverletOutputFormat=opencover
+        env:
+          MYSQL_HOST: 127.0.0.1
+          MYSQL_PORT: 3306
+          MYSQL_USER: loottrade_test
+          MYSQL_PASSWORD: testpassword
 
       - name: Debug coverage files
-        run: |
-          echo "Searching for coverage files"
-          find . -name "coverage*.xml" -print
+        run: find . -name "coverage.opencover.xml" -print
 
       - name: End SonarCloud analysis
         run: dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
