@@ -7,73 +7,46 @@ on:
     branches: [ "master" ]
 
 jobs:
-  test-and-docker:
+  integration-tests:
     runs-on: ubuntu-latest
 
-    steps:
-      # 1️⃣ Checkout LootTradeApp FIRST (docker-compose lives here)
-      - name: Checkout LootTradeApp
-        uses: actions/checkout@v4
-        with:
-          repository: stevethemob/LootTradeApp
-          path: LootTradeApp
+    services:
+      mysql:
+        image: mysql:8.0
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: rootpassword
+          MYSQL_DATABASE: loottrade_test
+          MYSQL_USER: loottrade_test
+          MYSQL_PASSWORD: testpassword
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=10
+        volumes:
+          - ${{ github.workspace }}/IntegrationTests/mysql-init:/docker-entrypoint-initdb.d
 
-      # 2️⃣ Checkout backend INSIDE LootTradeApp
+    steps:
       - name: Checkout backend
         uses: actions/checkout@v4
-        with:
-          repository: stevethemob/LootTradeBack-End
-          path: LootTradeApp/LootTradeBack-End
 
-      # 3️⃣ Setup .NET
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "8.0.x"
 
-      # 4️⃣ Restore, build, test backend
-      - name: Restore dependencies
+      - name: Restore
         run: dotnet restore
-        working-directory: LootTradeApp/LootTradeBack-End
 
       - name: Build
         run: dotnet build --no-restore --configuration Release
-        working-directory: LootTradeApp/LootTradeBack-End
 
-      - name: Run unit tests
+      - name: Run integration tests
         run: dotnet test --no-build --configuration Release
-        working-directory: LootTradeApp/LootTradeBack-End
-
-      # 5️⃣ Checkout frontend
-      - name: Checkout frontend
-        uses: actions/checkout@v4
-        with:
-          repository: stevethemob/loottrade_front-end
-          path: LootTradeApp/loottrade_front-end
-
-      # 6️⃣ Checkout database dump
-      - name: Checkout database
-        uses: actions/checkout@v4
-        with:
-          repository: stevethemob/loottradeDatabaseForCi
-          path: LootTradeApp/loottradeDatabaseForCi
-
-      # 7️⃣ Setup Docker
-      - name: Set up Docker
-        uses: docker/setup-buildx-action@v3
-
-      # 8️⃣ Run Docker Compose
-      - name: Build Docker images
-        run: docker compose build
-        working-directory: LootTradeApp
-
-      - name: Start Docker containers
-        run: docker compose up -d
-        working-directory: LootTradeApp
-
-      - name: Show running containers
-        run: docker ps
-
-      - name: Stop containers
-        run: docker compose down
-        working-directory: LootTradeApp
+        env:
+          MYSQL_HOST: 127.0.0.1
+          MYSQL_PORT: 3306
+          MYSQL_USER: loottrade_test
+          MYSQL_PASSWORD: testpassword
