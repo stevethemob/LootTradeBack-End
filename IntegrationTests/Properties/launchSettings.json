@@ -1,0 +1,13 @@
+﻿{
+  "profiles": {
+    "IntegrationTests": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "MYSQL_HOST": "127.0.0.1",
+        "MYSQL_PORT": "3308",
+        "MYSQL_USER": "loottrade_test",
+        "MYSQL_PASSWORD": "testpassword"
+      }
+    }
+  }
+}
