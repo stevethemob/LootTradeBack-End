@@ -70,7 +70,7 @@ jobs:
             -u loottrade_test \
             -ptestpassword \
             loottrade_test \
-            < IntegrationTests/Database/loot_tradeDatabaseStructure1.mysql.sql
+            < IntegrationTests/mysql-init/loot_tradeDatabaseStructure1.mysql.sql
 
       - name: Run tests with coverage (Unit + Integration)
         run: |
