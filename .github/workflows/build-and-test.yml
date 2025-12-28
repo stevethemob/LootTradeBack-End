@@ -7,26 +7,24 @@ on:
     branches: [ "master" ]
 
 jobs:
-  integration-tests:
+  tests:
     runs-on: ubuntu-latest
 
     services:
       mysql:
         image: mysql:8.0
-        ports:
-          - 3306:3306
         env:
           MYSQL_ROOT_PASSWORD: rootpassword
           MYSQL_DATABASE: loottrade_test
           MYSQL_USER: loottrade_test
           MYSQL_PASSWORD: testpassword
+        ports:
+          - 3306:3306
         options: >-
           --health-cmd="mysqladmin ping --silent"
           --health-interval=5s
           --health-timeout=5s
           --health-retries=10
-        volumes:
-          - ${{ github.workspace }}/IntegrationTests/mysql-init:/docker-entrypoint-initdb.d
 
     steps:
       - name: Checkout backend
@@ -37,16 +35,28 @@ jobs:
         with:
           dotnet-version: "8.0.x"
 
+      - name: Wait for MySQL
+        run: |
+          for i in {1..20}; do
+            mysqladmin ping -h mysql -u loottrade_test -ptestpassword && break
+            sleep 3
+          done
+
+      - name: Initialize database schema
+        run: |
+          mysql -h mysql -u loottrade_test -ptestpassword loottrade_test \
+          < IntegrationTests/mysql-init/loot_tradeDatabaseStructure1.mysql.sql
+
       - name: Restore
         run: dotnet restore
 
       - name: Build
         run: dotnet build --no-restore --configuration Release
 
-      - name: Run integration tests
+      - name: Run tests
         run: dotnet test --no-build --configuration Release
         env:
-          MYSQL_HOST: 127.0.0.1
+          MYSQL_HOST: mysql
           MYSQL_PORT: 3306
           MYSQL_USER: loottrade_test
           MYSQL_PASSWORD: testpassword
