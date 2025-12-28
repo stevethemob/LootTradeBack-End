@@ -114,6 +114,8 @@ namespace LootTrade.IntegrationTests.TestFixtures
             using var conn = new MySqlConnection($"Server={host};Port={port};Uid={user};Pwd={password};");
             conn.Open();
             new MySqlCommand($"DROP DATABASE IF EXISTS {databaseName};", conn).ExecuteNonQuery();
+
+            GC.SuppressFinalize(this);
         }
     }
 }
