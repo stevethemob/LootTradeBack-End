@@ -44,7 +44,11 @@ jobs:
 
       - name: Initialize database schema
         run: |
-          mysql -h mysql -u loottrade_test -ptestpassword loottrade_test \
+          sudo apt-get update
+          sudo apt-get install -y mysql-client
+
+          mysql -h 127.0.0.1 -P 3306 \
+          -u loottrade_test -ptestpassword loottrade_test \
           < IntegrationTests/mysql-init/loot_tradeDatabaseStructure1.mysql.sql
 
       - name: Restore
