@@ -62,6 +62,16 @@ jobs:
             sleep 2
           done
 
+      - name: Create database schema
+        run: |
+          mysql \
+            -h 127.0.0.1 \
+            -P 3306 \
+            -u loottrade_test \
+            -ptestpassword \
+            loottrade_test \
+            < IntegrationTests/Database/loot_tradeDatabaseStructure1.mysql.sql
+
       - name: Run tests with coverage (Unit + Integration)
         run: |
           dotnet test \
