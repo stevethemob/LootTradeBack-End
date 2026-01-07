@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace LootTradeDomainModels
+{
+    public class TradeRequest
+    {
+        public int OfferId { get; set; }
+        public int TraderId { get; set; }
+        public List<int> ItemIds { get; set; }
+    }
+}

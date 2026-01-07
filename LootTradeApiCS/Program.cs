@@ -113,6 +113,17 @@ builder.Services.AddTransient<IOfferRepository>(_ =>
     return new OfferRepository(dbConnString);
 });
 
+builder.Services.AddTransient<TradeService>(p =>
+{
+    var tradeRepsitory = p.GetRequiredService<ITradeRepository>();
+    return new TradeService(tradeRepsitory);
+});
+
+builder.Services.AddTransient<ITradeRepository>(_ =>
+{
+    return new TradeRepository(dbConnString);
+});
+
 builder.Services.AddSingleton<JwtService>();
 
 var app = builder.Build();
