@@ -9,7 +9,6 @@ namespace LootTradeDomainModels
     public class TradeRequest
     {
         public int OfferId { get; set; }
-        public int TraderId { get; set; }
         public List<int> ItemIds { get; set; }
     }
 }

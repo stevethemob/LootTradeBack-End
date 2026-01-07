@@ -1,7 +1,9 @@
 ﻿using LootTradeDomainModels;
 using LootTradeRepositories;
 using LootTradeServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace LootTradeApiCS.Controllers
 {
@@ -16,10 +18,15 @@ namespace LootTradeApiCS.Controllers
             this.tradeService = tradeService;
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult AddTradeOffer([FromBody] TradeRequest request)
         {
-            bool succes = tradeService.AddTradeOffer(request.OfferId, request.ItemIds, request.TraderId);
+            Claim? userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId");
+
+            int traderId = int.Parse(userIdClaim.Value);
+
+            bool succes = tradeService.AddTradeOffer(request.OfferId, request.ItemIds, traderId);
 
             if (!succes)
             {
