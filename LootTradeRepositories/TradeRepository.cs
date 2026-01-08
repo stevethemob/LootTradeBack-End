@@ -86,5 +86,30 @@ namespace LootTradeRepositories
 
             return id;
         }
+
+        public AllTradesDTO GetAllTradeIdsByGameIdAndUserId(int gameId, int userId)
+        {
+            AllTradesDTO AllTrades = new AllTradesDTO();
+
+            using (MySqlConnection conn = new MySqlConnection(connString))
+            {
+                conn.Open();
+                string sqlCommand = "SELECT Trade.id, User.username FROM Trade JOIN Offered ON Trade.offeredId = Offered.id JOIN Inventory ON Offered.inventoryId = Inventory.id JOIN Item ON Inventory.itemId = Item.id JOIN Game ON Item.gameId = Game.id JOIN User ON Inventory.userId = User.id WHERE Inventory.userId = @userId AND Game.id = @gameId;";
+                MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
+                cmd.Parameters.AddWithValue("@gameId", gameId);
+                cmd.Parameters.AddWithValue("@userId", userId);
+
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        AllTrades.TradeIds.Add(reader.GetInt32("id"));
+                        AllTrades.TraderUsernames.Add(reader.GetString("username"));
+                    }
+                }
+            }
+
+            return AllTrades;
+        }
     }
 }

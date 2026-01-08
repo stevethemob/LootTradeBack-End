@@ -35,5 +35,13 @@ namespace LootTradeApiCS.Controllers
 
             return Ok();
         }
+
+        [HttpGet]
+        public IActionResult GetAllTradesByUserIdAndGameId(int userId, int gameId)
+        {
+            AllTrades allTrades = tradeService.GetAllTradeIdsByGameIdAndUserId(gameId, userId);
+
+            return Ok(allTrades);
+        }
     }
 }

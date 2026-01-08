@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LootTradeDTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,5 +10,6 @@ namespace LootTradeInterfaces
     public interface ITradeRepository
     {
         public bool AddTradeOffer(int offerId, List<int> itemIds, int traderId);
+        public AllTradesDTO GetAllTradeIdsByGameIdAndUserId(int gameId, int userId);
     }
 }

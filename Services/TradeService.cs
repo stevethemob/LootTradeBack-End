@@ -1,9 +1,6 @@
-﻿using LootTradeInterfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LootTradeDTOs;
+using LootTradeInterfaces;
+using LootTradeDomainModels;
 
 namespace LootTradeServices
 {
@@ -23,6 +20,22 @@ namespace LootTradeServices
             }
 
             return tradeRepository.AddTradeOffer(offerId, itemIds, traderId);
+        }
+
+        public AllTrades GetAllTradeIdsByGameIdAndUserId(int gameId, int userId)
+        {
+            AllTrades allTrades = new AllTrades();
+            AllTradesDTO allTradesDTO = tradeRepository.GetAllTradeIdsByGameIdAndUserId(gameId, userId);
+            foreach (int tradeId in allTradesDTO.TradeIds)
+            {
+                allTrades.TradeIds.Add(tradeId);
+            }
+            foreach(string traderUsers in allTradesDTO.TraderUsernames)
+            {
+                allTrades.TraderUsernames.Add(traderUsers);
+            }
+
+            return allTrades;
         }
     }
 }
