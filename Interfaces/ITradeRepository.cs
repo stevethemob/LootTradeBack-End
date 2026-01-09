@@ -11,5 +11,6 @@ namespace LootTradeInterfaces
     {
         public bool AddTradeOffer(int offerId, List<int> itemIds, int traderId);
         public AllTradesDTO GetAllTradeIdsByGameIdAndUserId(int gameId, int userId);
+        public TradeDTO GetTradeByTradeId(int tradeId);
     }
 }

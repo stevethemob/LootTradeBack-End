@@ -43,5 +43,13 @@ namespace LootTradeApiCS.Controllers
 
             return Ok(allTrades);
         }
+
+        [HttpGet("ByTradeId/{tradeId}")]
+        public IActionResult GetTradeById(int tradeId)
+        {
+            Trade trade = tradeService.GetTradeByTradeId(tradeId);
+
+            return Ok(trade);
+        }
     }
 }

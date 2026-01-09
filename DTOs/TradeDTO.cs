@@ -8,11 +8,18 @@ namespace LootTradeDTOs
 {
     public class TradeDTO
     {
-        public int id {  get; set; }
-        public List<int> ItemIds {  get; set; }
+        public TradeDTO(int id, ItemDTO itemOffer, string traderUser)
+        {
+            Id = id;
+            ItemOffer = itemOffer;
+            TraderUser = traderUser;
+            TradeOffers = new List<ItemDTO>();
+        }
+        public int Id {  get; set; }
+        public ItemDTO ItemOffer { get; set; }
 
-        public List<int> UserIds { get; set; }
+        public List<ItemDTO> TradeOffers { get; set; }
 
-
+        public string TraderUser { get; set; }
     }
 }

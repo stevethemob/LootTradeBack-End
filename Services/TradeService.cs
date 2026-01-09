@@ -37,5 +37,22 @@ namespace LootTradeServices
 
             return allTrades;
         }
+
+        public Trade GetTradeByTradeId(int tradeId)
+        {
+            TradeDTO tradeDTO = tradeRepository.GetTradeByTradeId(tradeId);
+
+            Item itemTradeOffer = new Item(tradeDTO.ItemOffer.Id, tradeDTO.ItemOffer.GameId, tradeDTO.ItemOffer.Name, tradeDTO.ItemOffer.Description);
+
+            Trade trade = new Trade(tradeDTO.Id, itemTradeOffer, tradeDTO.TraderUser);
+
+            foreach (ItemDTO itemDTO in tradeDTO.TradeOffers)
+            {
+                Item item = new Item(itemDTO.Id, itemDTO.GameId, itemDTO.Name, itemDTO.Description);
+                trade.TradeOffers.Add(item);
+            }
+
+            return trade;
+        }
     }
 }
