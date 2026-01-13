@@ -1,0 +1,44 @@
+name: Docker Publish
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # --------------------
+      # Backend image
+      # --------------------
+      - name: Build & push backend
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: LootTradeApiCS/Dockerfile
+          push: true
+          tags: |
+            laurensdegrootfontys/loottrade-backend:latest
+            laurensdegrootfontys/loottrade-backend:${{ github.sha }}
+
+      # --------------------
+      # Frontend image
+      # --------------------
+      - name: Build & push frontend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./LootTradeApiFrontEnd/LootTrade-Front-End
+          push: true
+          tags: |
+            laurensdegrootfontys/loottrade-frontend:latest
+            laurensdegrootfontys/loottrade-frontend:${{ github.sha }}
