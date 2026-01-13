@@ -57,10 +57,10 @@ namespace LootTradeApiCS.Controllers
             return Ok(trade);
         }
 
-        [HttpPost("AcceptTradeByTradeAndOfferedId/{tradeId}/{offeredId}")]
-        public IActionResult AcceptTrade(int tradeId, int offeredId)
+        [HttpPost("AcceptTradeByTradeId/{tradeId}")]
+        public IActionResult AcceptTrade(int tradeId)
         {
-            tradeService.AcceptTrade(tradeId, offeredId);
+            tradeService.AcceptTrade(tradeId);
 
             return Ok();
         }

@@ -182,8 +182,9 @@ namespace LootTradeRepositories
             return items;
         }
 
-        public bool AcceptTrade(int tradeId, int offeredId)
+        public bool AcceptTrade(int tradeId)
         { 
+            int offeredId = GetOfferedIdByTradeId(tradeId);
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
@@ -196,6 +197,28 @@ namespace LootTradeRepositories
             }
 
             return true;
+        }
+
+        private int GetOfferedIdByTradeId(int tradeId)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connString))
+            {
+                conn.Open();
+                string sqlCommand = "SELECT offeredId FROM trade WHERE Id = @tradeId";
+                MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
+                cmd.Parameters.AddWithValue("@tradeId", tradeId);
+
+                using(MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (!reader.Read())
+                    {
+                        throw new InvalidOperationException("Item with id " + tradeId + " not found");
+                    }
+                    int id = reader.GetInt32("id");
+
+                    return id;
+                }
+            }
         }
     }
 }
