@@ -54,5 +54,10 @@ namespace LootTradeServices
 
             return trade;
         }
+
+        public bool AcceptTrade(int tradeId, int offeredId)
+        {
+            return tradeRepository.AcceptTrade(tradeId, offeredId);
+        }
     }
 }

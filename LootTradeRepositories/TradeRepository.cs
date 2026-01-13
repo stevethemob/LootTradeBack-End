@@ -1,6 +1,7 @@
 ﻿using LootTradeDTOs;
 using LootTradeInterfaces;
 using MySql.Data.MySqlClient;
+using Mysqlx.Crud;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -179,6 +180,22 @@ namespace LootTradeRepositories
 
 
             return items;
+        }
+
+        public bool AcceptTrade(int tradeId, int offeredId)
+        { 
+            using (MySqlConnection conn = new MySqlConnection(connString))
+            {
+                conn.Open();
+                string sqlCommand = "INSERT INTO accepted_trade(tradeId, offeredId) VALUES(@tradeId, @offeredId)";
+                MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
+                cmd.Parameters.AddWithValue("@tradeId", tradeId);
+                cmd.Parameters.AddWithValue("@offeredId", offeredId);
+
+                cmd.ExecuteNonQuery();
+            }
+
+            return true;
         }
     }
 }
