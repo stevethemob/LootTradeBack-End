@@ -102,6 +102,24 @@ namespace LootTradeApiCS.Controllers
 
             return Ok(allOffers);
         }
+
+        [Authorize]
+        [HttpDelete("DeleteByOfferId/{offerId}")]
+        public IActionResult DeleteOfferById(int offerId)
+        {
+            Claim? userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId");
+
+            int userId = int.Parse(userIdClaim.Value);
+
+            bool success = offerService.DeleteOfferById(userId, offerId);
+
+            if (!success)
+            {
+                return StatusCode(500, "Deleting the offer failed");
+            }
+
+            return Ok("Offer deleted succesfully");
+        }
     }
 }
 

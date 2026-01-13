@@ -1,6 +1,7 @@
 ﻿using LootTradeDTOs;
 using LootTradeInterfaces;
 using MySql.Data.MySqlClient;
+using System.Security.Cryptography;
 
 namespace LootTradeRepositories
 {
@@ -92,6 +93,43 @@ namespace LootTradeRepositories
             }
 
             return offers;
+        }
+
+        public bool DeleteOfferById(int offerId)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connString))
+            {
+                conn.Open();
+                string sqlCommand = "DELETE FROM Offered WHERE id = @offerId;";
+                MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
+                cmd.Parameters.AddWithValue("@offerId", offerId);
+
+                cmd.ExecuteNonQuery();
+            }
+
+            return true;
+        }
+
+        public bool CheckIfOfferIsBySameUser(int userId, int offerId)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connString))
+            {
+                conn.Open();
+                string sqlCommand = "SELECT 1 FROM offered JOIN inventory ON offered.inventoryId = inventory.id WHERE offered.id = @offerId AND inventory.userId = @userId LIMIT 1;";
+                MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
+                cmd.Parameters.AddWithValue("@userId", userId);
+                cmd.Parameters.AddWithValue("@offerId", offerId);
+
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (!reader.Read())
+                    {
+                        return false;
+                    }
+
+                    return true;
+                }
+            }
         }
     }
 }

@@ -69,7 +69,7 @@ namespace LootTradeApiCS.Controllers
 
             if (!success)
             {
-                return 
+                return StatusCode(500, "accepting the trade failed"); 
             }
 
             return Ok();

@@ -75,5 +75,15 @@ namespace LootTradeServices
 
             return offers;
         }
+
+        public bool DeleteOfferById(int userId, int offerId)
+        {
+            if (offerRepository.CheckIfOfferIsBySameUser(userId, offerId))
+            {
+                return offerRepository.DeleteOfferById(offerId);
+            }
+
+            return false;
+        }
     }
 }
