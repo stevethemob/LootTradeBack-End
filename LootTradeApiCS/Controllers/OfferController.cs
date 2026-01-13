@@ -154,6 +154,18 @@ namespace LootTradeApiCS.Controllers
 
             return Ok(allOffers);
         }
+
+
+        [HttpGet("GetOfferDetailsByOfferId/{offerId}")]
+        public IActionResult GetOfferDetailsByOfferId(int offerId)
+        {
+            Offer offer = offerService.GetOfferDetailsByOfferId(offerId);
+
+            AllOffers offerDetails = new AllOffers(offer.Id, offer.DateTimeOpen, offer.Item.Id, offer.Item.Name, offer.Item.Description);
+
+
+            return Ok(offerDetails);
+        }
     }
 }
 

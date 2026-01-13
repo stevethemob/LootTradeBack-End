@@ -164,5 +164,35 @@ namespace LootTradeRepositories
 
             return offers;
         }
+
+        public OfferDTO GetOfferDetailsByOfferId(int offerId)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connString))
+            {
+                conn.Open();
+                string sqlCommand = "";
+                MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
+                cmd.Parameters.AddWithValue("@offerId", offerId);
+
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (!reader.Read())
+                    {
+                        throw new InvalidOperationException("No offer found");
+                    }
+
+                    OfferDTO offer = new OfferDTO();
+                    offer.Id = reader.GetInt32("offered_id");
+                    offer.DateTimeOpen = reader.GetDateTime("dateTimeOpen");
+                    offer.Item = new ItemDTO(
+                    reader.GetInt32("item_id"),
+                    reader.GetInt32("gameId"),
+                    reader.GetString("name"),
+                    reader.GetString("description"));
+
+                    return offer;
+                }
+            }
+        }
     }
 }

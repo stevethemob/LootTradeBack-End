@@ -20,5 +20,6 @@ namespace LootTradeInterfaces
         public bool CheckIfOfferIsBySameUser(int userId, int offerId);
 
         public List<OfferDTO> GetAllOffersOfSpecificUserByUserIdAndGameId(int userId, int gameId);
+        public OfferDTO GetOfferDetailsByOfferId(int offerId);
     }
 }
