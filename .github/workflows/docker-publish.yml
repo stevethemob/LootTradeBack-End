@@ -22,7 +22,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: Dockerfile   # or LootTradeApiCS/Dockerfile if not root
+          file: LootTradeApiCS/Dockerfile   # or LootTradeApiCS/Dockerfile if not root
           push: true
           tags: |
             laurensdegrootfontys/loottrade-backend:latest
