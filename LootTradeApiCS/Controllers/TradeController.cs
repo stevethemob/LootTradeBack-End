@@ -19,7 +19,7 @@ namespace LootTradeApiCS.Controllers
         }
 
         [Authorize]
-        [HttpPost]
+        [HttpPost("AddTradeOffer")]
         public IActionResult AddTradeOffer([FromBody] TradeRequest request)
         {
             Claim? userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId");
@@ -36,9 +36,14 @@ namespace LootTradeApiCS.Controllers
             return Ok();
         }
 
-        [HttpGet]
-        public IActionResult GetAllTradesByUserIdAndGameId(int userId, int gameId)
+        [Authorize]
+        [HttpGet("GetAllTradesByGameId/{gameId}")]
+        public IActionResult GetAllTradesByUserIdAndGameId(int gameId)
         {
+            Claim? userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId");
+
+            int userId = int.Parse(userIdClaim.Value);
+
             AllTrades allTrades = tradeService.GetAllTradeIdsByGameIdAndUserId(gameId, userId);
 
             return Ok(allTrades);
