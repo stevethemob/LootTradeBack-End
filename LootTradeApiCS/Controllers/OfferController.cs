@@ -1,4 +1,5 @@
 ﻿using LootTradeDomainModels;
+using LootTradeRepositories;
 using LootTradeServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -119,6 +120,39 @@ namespace LootTradeApiCS.Controllers
             }
 
             return Ok("Offer deleted succesfully");
+        }
+
+        [Authorize]
+        [HttpGet("GetAllOffersByFromSpecificUserByGameId/{gameId}")]
+        public IActionResult GetAllOffersByUserId(int gameId)
+        {
+            Claim? userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId");
+
+            int userId = int.Parse(userIdClaim.Value);
+
+            List<Offer> offers = offerService.GetAllOffersOfSpecificUserByUserIdAndGameId(userId, gameId);
+
+            List<AllOffers> allOffers = new List<AllOffers>();
+
+            foreach (Offer offer in offers)
+            {
+                AllOffers offerForTransfer = new AllOffers
+                (
+                offer.Id,
+                offer.DateTimeOpen,
+                offer.Item.Id,
+                offer.Item.Name,
+                offer.Item.Description
+                );
+                allOffers.Add(offerForTransfer);
+            }
+
+            if (allOffers.Count == 0)
+            {
+                return BadRequest("no offers were found");
+            }
+
+            return Ok(allOffers);
         }
     }
 }

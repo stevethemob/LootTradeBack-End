@@ -131,5 +131,38 @@ namespace LootTradeRepositories
                 }
             }
         }
+
+        public List<OfferDTO> GetAllOffersOfSpecificUserByUserIdAndGameId(int userId, int gameId)
+        {
+            List<OfferDTO> offers = new List<OfferDTO>();
+
+            using (MySqlConnection conn = new MySqlConnection(connString))
+            {
+                conn.Open();
+                string sqlCommand = "SELECT Offered.id AS offered_id, Offered.dateTimeOpen, Item.id AS item_id, Item.gameId, Item.name, Item.description FROM Offered JOIN Inventory ON Inventory.id = Offered.inventoryId JOIN Item ON Item.id = Inventory.itemId JOIN Game ON Game.id = Item.gameId WHERE Inventory.userId = @userId AND Game.id = @gameId AND NOT EXISTS (SELECT 1 FROM accepted_trade at WHERE at.OfferedId = Offered.id);";
+                MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
+                cmd.Parameters.AddWithValue("@userId", userId);
+                cmd.Parameters.AddWithValue("@gameId", gameId);
+
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        OfferDTO offer = new OfferDTO();
+                        offer.Id = reader.GetInt32("offered_id");
+                        offer.DateTimeOpen = reader.GetDateTime("dateTimeOpen");
+                        offer.Item = new ItemDTO(
+                        reader.GetInt32("item_id"),
+                        reader.GetInt32("gameId"),
+                        reader.GetString("name"),
+                        reader.GetString("description")
+                        );
+                        offers.Add(offer);
+                    }
+                }
+            }
+
+            return offers;
+        }
     }
 }

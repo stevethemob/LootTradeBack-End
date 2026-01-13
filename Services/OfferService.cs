@@ -85,5 +85,31 @@ namespace LootTradeServices
 
             return false;
         }
+
+        public List<Offer> GetAllOffersOfSpecificUserByUserIdAndGameId(int userId, int gameId)
+        {
+            List<Offer> offers = new List<Offer>();
+
+            List<OfferDTO> offerDTOs = offerRepository.GetAllOffersOfSpecificUserByUserIdAndGameId(userId, gameId);
+
+            foreach (OfferDTO offerDTO in offerDTOs)
+            {
+                Offer offer = new Offer();
+
+                offer.Id = offerDTO.Id;
+                offer.DateTimeOpen = offerDTO.DateTimeOpen;
+                offer.Item = new Item
+                (
+                offerDTO.Item.Id,
+                offerDTO.Item.GameId,
+                offerDTO.Item.Name,
+                offerDTO.Item.Description
+                );
+
+                offers.Add(offer);
+            }
+
+            return offers;
+        }
     }
 }

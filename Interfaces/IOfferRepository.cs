@@ -16,6 +16,9 @@ namespace LootTradeInterfaces
         public List<OfferDTO> GetOffersBySearchAndGameId(string searchQuery, int gameId);
 
         public bool DeleteOfferById(int offerId);
+
         public bool CheckIfOfferIsBySameUser(int userId, int offerId);
+
+        public List<OfferDTO> GetAllOffersOfSpecificUserByUserIdAndGameId(int userId, int gameId);
     }
 }
