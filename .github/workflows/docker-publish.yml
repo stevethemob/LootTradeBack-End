@@ -1,4 +1,4 @@
-name: Docker Publish
+name: Docker Publish Backend
 
 on:
   push:
@@ -18,27 +18,12 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # --------------------
-      # Backend image
-      # --------------------
-      - name: Build & push backend
+      - name: Build & push backend image
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: LootTradeApiCS/Dockerfile
+          file: Dockerfile   # or LootTradeApiCS/Dockerfile if not root
           push: true
           tags: |
             laurensdegrootfontys/loottrade-backend:latest
             laurensdegrootfontys/loottrade-backend:${{ github.sha }}
-
-      # --------------------
-      # Frontend image
-      # --------------------
-      - name: Build & push frontend
-        uses: docker/build-push-action@v5
-        with:
-          context: ./LootTradeApiFrontEnd/LootTrade-Front-End
-          push: true
-          tags: |
-            laurensdegrootfontys/loottrade-frontend:latest
-            laurensdegrootfontys/loottrade-frontend:${{ github.sha }}
