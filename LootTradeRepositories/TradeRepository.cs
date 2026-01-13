@@ -214,9 +214,31 @@ namespace LootTradeRepositories
                     {
                         throw new InvalidOperationException("Item with id " + tradeId + " not found");
                     }
-                    int id = reader.GetInt32("id");
+                    int id = reader.GetInt32("offeredId");
 
                     return id;
+                }
+            }
+        }
+
+        public bool CheckIfTradeIsBySameUser(int tradeId, int userId)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connString))
+            {
+                conn.Open();
+                string sqlCommand = "SELECT 1 FROM trade JOIN offered ON offered.id = trade.offeredId JOIN inventory ON inventory.id = offered.inventoryId WHERE trade.id = @tradeId AND inventory.userId = @userId";
+                MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
+                cmd.Parameters.AddWithValue("@tradeId", tradeId);
+                cmd.Parameters.AddWithValue("@userId", userId);
+
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (!reader.Read())
+                    {
+                        return false;
+                    }
+
+                    return true;
                 }
             }
         }

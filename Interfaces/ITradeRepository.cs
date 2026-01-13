@@ -13,5 +13,6 @@ namespace LootTradeInterfaces
         public AllTradesDTO GetAllTradeIdsByGameIdAndUserId(int gameId, int userId);
         public TradeDTO GetTradeByTradeId(int tradeId);
         public bool AcceptTrade(int tradeId);
+        public bool CheckIfTradeIsBySameUser(int tradeId, int userId);
     }
 }

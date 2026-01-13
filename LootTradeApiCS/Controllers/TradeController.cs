@@ -57,10 +57,20 @@ namespace LootTradeApiCS.Controllers
             return Ok(trade);
         }
 
+        [Authorize]
         [HttpPost("AcceptTradeByTradeId/{tradeId}")]
         public IActionResult AcceptTrade(int tradeId)
         {
-            tradeService.AcceptTrade(tradeId);
+            Claim? userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId");
+
+            int userId = int.Parse(userIdClaim.Value);
+
+            bool success = tradeService.AcceptTrade(tradeId, userId);
+
+            if (!success)
+            {
+                return 
+            }
 
             return Ok();
         }

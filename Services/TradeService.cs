@@ -55,9 +55,14 @@ namespace LootTradeServices
             return trade;
         }
 
-        public bool AcceptTrade(int tradeId)
+        public bool AcceptTrade(int tradeId, int userId)
         {
-            return tradeRepository.AcceptTrade(tradeId);
+            if (!tradeRepository.CheckIfTradeIsBySameUser(tradeId, userId))
+            {
+                return tradeRepository.AcceptTrade(tradeId);
+            }
+
+            return false;
         }
     }
 }
