@@ -10,16 +10,16 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v34e1148
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
 
       - name: Log in to Docker Hub
-        uses: docker/login-action@5e57cd1
+        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build & push backend image
-        uses: docker/build-push-action@ca052bb
+        uses: docker/build-push-action@ca052bb54ab0790a636c9b5f226502c73d547a25
         with:
           context: .
           file: LootTradeApiCS/Dockerfile   # or LootTradeApiCS/Dockerfile if not root
