@@ -59,7 +59,9 @@ namespace LootTradeApiCS.Controllers
                 return Unauthorized("Invalid username or password");
             }
 
-            string token = jwt.GenerateToken(userId, dto.Username);
+            User user = userService.GetUserById(userId);
+
+            string token = jwt.GenerateToken(userId, dto.Username, user.Role);
 
             return Ok(new {token});
         }

@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using LootTradeDomainModels;
 
 namespace LootTradeApiCSJwtService
 {
@@ -15,12 +17,13 @@ namespace LootTradeApiCSJwtService
             _config = config;
         }
 
-        public string GenerateToken(int userId, string username)
+        public string GenerateToken(int userId, string username, User.UserRole role)
         {
             var claims = new[]
             {
             new Claim("userId", userId.ToString()),
-            new Claim(ClaimTypes.Name, username)
+            new Claim(ClaimTypes.Name, username),
+            new Claim(ClaimTypes.Role, role.ToString())
         };
 
             var key = new SymmetricSecurityKey(
