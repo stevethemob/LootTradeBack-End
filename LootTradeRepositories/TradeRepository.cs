@@ -1,18 +1,40 @@
 ﻿using LootTradeDTOs;
 using LootTradeInterfaces;
 using MySql.Data.MySqlClient;
-using Mysqlx.Crud;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LootTradeRepositories
 {
     public class TradeRepository : ITradeRepository
     {
-        readonly string connString;
+        private readonly string connString;
+
+        private static class Params
+        {
+            public const string TradeId = "@tradeId";
+            public const string OfferedId = "@offeredId";
+            public const string UserId = "@userId";
+            public const string GameId = "@gameId";
+            public const string ItemId = "@itemId";
+            public const string InventoryId = "@inventoryId";
+            public const string TraderId = "@traderId";
+            public const string OfferId = "@offerId";
+        }
+
+        private static class Columns
+        {
+            public const string Id = "id";
+            public const string OfferedId = "offeredId";
+            public const string Username = "username";
+            public const string GameId = "gameId";
+            public const string Name = "name";
+            public const string Description = "description";
+
+            public const string OfferItemId = "offerItemId";
+            public const string OfferGameId = "offerGameId";
+            public const string OfferItemName = "offerItemName";
+            public const string OfferItemDescription = "offerItemDescription";
+            public const string TradeUsername = "tradeUsername";
+        }
 
         public TradeRepository(string connString)
         {
@@ -21,12 +43,12 @@ namespace LootTradeRepositories
 
         public bool AddTradeOffer(int offerId, List<int> itemIds, int traderId)
         {
-            int TradeId = AddTradeTableRowAndReturnId(offerId);
+            int tradeId = AddTradeTableRowAndReturnId(offerId);
 
             foreach (int itemId in itemIds)
             {
                 int inventoryId = GetInventoryIdByItemAndTraderId(itemId, traderId);
-                AddItemsToTrade(TradeId, inventoryId);
+                AddItemsToTrade(tradeId, inventoryId);
             }
 
             return true;
@@ -37,91 +59,81 @@ namespace LootTradeRepositories
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
-                string sqlCommand = "INSERT INTO trade(offeredId) VALUES (@offerId)";
+                string sqlCommand = "INSERT INTO trade (offeredId) VALUES (@offerId)";
                 using (MySqlCommand cmd = new MySqlCommand(sqlCommand, conn))
                 {
-                    cmd.Parameters.AddWithValue("@offerId", offerId);
-
+                    cmd.Parameters.AddWithValue(Params.OfferId, offerId);
                     cmd.ExecuteNonQuery();
-
                     return (int)cmd.LastInsertedId;
                 }
             }
         }
 
-        private bool AddItemsToTrade(int tradeId, int inventoryId)
+        private void AddItemsToTrade(int tradeId, int inventoryId)
         {
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
-                string sqlCommand = "INSERT INTO trade_item (tradeId, inventoryId) VALUES (@tradeId, @InventoryId)";
+                string sqlCommand = "INSERT INTO trade_item (tradeId, inventoryId) VALUES (@tradeId, @inventoryId)";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
-                cmd.Parameters.AddWithValue("@tradeId", tradeId);
-                cmd.Parameters.AddWithValue("@inventoryId", inventoryId);
-
+                cmd.Parameters.AddWithValue(Params.TradeId, tradeId);
+                cmd.Parameters.AddWithValue(Params.InventoryId, inventoryId);
                 cmd.ExecuteNonQuery();
             }
-
-            return true;
         }
 
         private int GetInventoryIdByItemAndTraderId(int itemId, int traderId)
         {
-            int id = 0;
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
                 string sqlCommand = "SELECT id FROM inventory WHERE itemId = @itemId AND userId = @traderId";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
-                cmd.Parameters.AddWithValue("@itemId", itemId);
-                cmd.Parameters.AddWithValue("@traderId", traderId);
+                cmd.Parameters.AddWithValue(Params.ItemId, itemId);
+                cmd.Parameters.AddWithValue(Params.TraderId, traderId);
 
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
-                    if (reader.Read())
-                    {
-                        id = reader.GetInt32("id");
-                    }
+                    if (!reader.Read())
+                        throw new InvalidOperationException("Inventory item not found");
+
+                    return reader.GetInt32(Columns.Id);
                 }
             }
-
-            return id;
         }
 
         public AllTradesDTO GetAllTradeIdsByGameIdAndUserId(int gameId, int userId)
         {
-            AllTradesDTO AllTrades = new AllTradesDTO();
+            AllTradesDTO allTrades = new AllTradesDTO();
 
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
                 string sqlCommand = "SELECT Trade.id, User.username FROM Trade JOIN Offered ON Trade.offeredId = Offered.id JOIN Inventory ON Offered.inventoryId = Inventory.id JOIN Item ON Inventory.itemId = Item.id JOIN Game ON Item.gameId = Game.id JOIN User ON Inventory.userId = User.id WHERE Inventory.userId = @userId AND Game.id = @gameId;";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
-                cmd.Parameters.AddWithValue("@gameId", gameId);
-                cmd.Parameters.AddWithValue("@userId", userId);
+                cmd.Parameters.AddWithValue(Params.GameId, gameId);
+                cmd.Parameters.AddWithValue(Params.UserId, userId);
 
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        AllTrades.TradeIds.Add(reader.GetInt32("id"));
-                        AllTrades.TraderUsernames.Add(reader.GetString("username"));
+                        allTrades.TradeIds.Add(reader.GetInt32(Columns.Id));
+                        allTrades.TraderUsernames.Add(reader.GetString(Columns.Username));
                     }
                 }
             }
 
-            return AllTrades;
+            return allTrades;
         }
 
         public TradeDTO GetTradeByTradeId(int tradeId)
         {
             TradeDTO trade = GetTradeWithoutItemsByTradeId(tradeId);
-            List<ItemDTO> items = GetAllItemsInOneTradeByTradeId(tradeId);
-            foreach (ItemDTO item in items)
+            foreach (ItemDTO item in GetAllItemsInOneTradeByTradeId(tradeId))
             {
                 trade.TradeOffers.Add(item);
             }
-
             return trade;
         }
 
@@ -132,23 +144,21 @@ namespace LootTradeRepositories
                 conn.Open();
                 string sqlCommand = "SELECT Trade.id AS tradeId, Item.id AS offerItemId, Item.gameId AS offerGameId, Item.name AS offerItemName, Item.description AS offerItemDescription, User.username AS tradeUsername FROM Trade JOIN Offered ON Trade.offeredId = Offered.id JOIN Inventory ON Offered.inventoryId = Inventory.id JOIN Item ON Inventory.itemId = Item.id JOIN User ON Inventory.userId = User.id WHERE Trade.id = @tradeId";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
-                cmd.Parameters.AddWithValue("@tradeId", tradeId);
+                cmd.Parameters.AddWithValue(Params.TradeId, tradeId);
 
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
                     if (!reader.Read())
-                    {
-                        throw new InvalidOperationException("Item with id " + tradeId + " not found");
-                    }
-                    int offerItemId = reader.GetInt32("offerItemId");
-                    int offerItemGameId = reader.GetInt32("offerGameId");
-                    string offerItemName = reader.GetString("offerItemName");
-                    string offerItemDescription = reader.GetString("offerItemDescription");
-                    string tradeUsername = reader.GetString("tradeUsername");
+                        throw new InvalidOperationException($"Trade with id {tradeId} not found");
 
-                    ItemDTO item = new ItemDTO(offerItemId, offerItemGameId, offerItemName, offerItemDescription);
+                    ItemDTO item = new ItemDTO(
+                        reader.GetInt32(Columns.OfferItemId),
+                        reader.GetInt32(Columns.OfferGameId),
+                        reader.GetString(Columns.OfferItemName),
+                        reader.GetString(Columns.OfferItemDescription)
+                    );
 
-                    return new TradeDTO(tradeId, item, tradeUsername);
+                    return new TradeDTO(tradeId, item, reader.GetString(Columns.TradeUsername));
                 }
             }
         }
@@ -162,22 +172,21 @@ namespace LootTradeRepositories
                 conn.Open();
                 string sqlCommand = "SELECT Item.id, Item.gameId, Item.name, Item.description FROM Trade_Item JOIN Inventory ON Trade_Item.inventoryId = Inventory.id JOIN Item ON Inventory.itemId = Item.id WHERE Trade_Item.tradeId = @tradeId";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
-                cmd.Parameters.AddWithValue("@tradeId", tradeId);
+                cmd.Parameters.AddWithValue(Params.TradeId, tradeId);
 
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        int id = reader.GetInt32("id");
-                        int gameId = reader.GetInt32("gameId");
-                        string itemName = reader.GetString("name");
-                        string description = reader.GetString("description");
-                        ItemDTO item = new ItemDTO(id, gameId, itemName, description);
-                        items.Add(item);
+                        items.Add(new ItemDTO(
+                            reader.GetInt32(Columns.Id),
+                            reader.GetInt32(Columns.GameId),
+                            reader.GetString(Columns.Name),
+                            reader.GetString(Columns.Description)
+                        ));
                     }
                 }
             }
-
 
             return items;
         }
@@ -186,18 +195,15 @@ namespace LootTradeRepositories
         {
             int offeredId = GetOfferedIdByTradeId(tradeId);
             if (CheckIfTradeIsAlreadyAccepted(offeredId))
-            {
                 return false;
-            }
 
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
-                string sqlCommand = "INSERT INTO accepted_trade(tradeId, offeredId) VALUES(@tradeId, @offeredId)";
+                string sqlCommand = "INSERT INTO accepted_trade (tradeId, offeredId) VALUES (@tradeId, @offeredId)";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
-                cmd.Parameters.AddWithValue("@tradeId", tradeId);
-                cmd.Parameters.AddWithValue("@offeredId", offeredId);
-
+                cmd.Parameters.AddWithValue(Params.TradeId, tradeId);
+                cmd.Parameters.AddWithValue(Params.OfferedId, offeredId);
                 cmd.ExecuteNonQuery();
             }
 
@@ -209,19 +215,16 @@ namespace LootTradeRepositories
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
-                string sqlCommand = "SELECT offeredId FROM trade WHERE Id = @tradeId";
+                string sqlCommand = "SELECT offeredId FROM trade WHERE id = @tradeId";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
-                cmd.Parameters.AddWithValue("@tradeId", tradeId);
+                cmd.Parameters.AddWithValue(Params.TradeId, tradeId);
 
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
                     if (!reader.Read())
-                    {
-                        throw new InvalidOperationException("Item with id " + tradeId + " not found");
-                    }
-                    int id = reader.GetInt32("offeredId");
+                        throw new InvalidOperationException($"Trade with id {tradeId} not found");
 
-                    return id;
+                    return reader.GetInt32(Columns.OfferedId);
                 }
             }
         }
@@ -233,15 +236,11 @@ namespace LootTradeRepositories
                 conn.Open();
                 string sqlCommand = "SELECT id FROM accepted_trade WHERE offeredId = @offeredId";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
-                cmd.Parameters.AddWithValue("@offeredId", offeredId);
+                cmd.Parameters.AddWithValue(Params.OfferedId, offeredId);
 
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
-                    if (!reader.Read())
-                    {
-                        return false;
-                    }
-                    return true;
+                    return reader.Read();
                 }
             }
         }
@@ -253,17 +252,12 @@ namespace LootTradeRepositories
                 conn.Open();
                 string sqlCommand = "SELECT 1 FROM trade JOIN offered ON offered.id = trade.offeredId JOIN inventory ON inventory.id = offered.inventoryId WHERE trade.id = @tradeId AND inventory.userId = @userId";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
-                cmd.Parameters.AddWithValue("@tradeId", tradeId);
-                cmd.Parameters.AddWithValue("@userId", userId);
+                cmd.Parameters.AddWithValue(Params.TradeId, tradeId);
+                cmd.Parameters.AddWithValue(Params.UserId, userId);
 
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
-                    if (!reader.Read())
-                    {
-                        return false;
-                    }
-
-                    return true;
+                    return reader.Read();
                 }
             }
         }
@@ -275,9 +269,9 @@ namespace LootTradeRepositories
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
-                string sqlCommand = "SELECT DISTINCT Trade.id AS tradeId, offerer.username AS offererName, trader.username AS traderName FROM Trade JOIN Offered ON Trade.offeredId = Offered.id JOIN Inventory offerInv ON Offered.inventoryId = offerInv.id JOIN User offerer ON offerInv.userId = offerer.id JOIN Trade_Item ti ON ti.tradeId = Trade.id JOIN Inventory tradeInv ON ti.inventoryId = tradeInv.id JOIN User trader ON tradeInv.userId = trader.id JOIN Item ON offerInv.itemId = Item.id JOIN Game ON Item.gameId = Game.id WHERE Game.id = 1;";
+                string sqlCommand = "SELECT DISTINCT Trade.id AS tradeId, offerer.username AS offererName, trader.username AS traderName FROM Trade JOIN Offered ON Trade.offeredId = Offered.id JOIN Inventory offerInv ON Offered.inventoryId = offerInv.id JOIN User offerer ON offerInv.userId = offerer.id JOIN Trade_Item ti ON ti.tradeId = Trade.id JOIN Inventory tradeInv ON ti.inventoryId = tradeInv.id JOIN User trader ON tradeInv.userId = trader.id JOIN Item ON offerInv.itemId = Item.id JOIN Game ON Item.gameId = Game.id WHERE Game.id = @gameId;";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
-                cmd.Parameters.AddWithValue("@gameId", gameId);
+                cmd.Parameters.AddWithValue(Params.GameId, gameId);
 
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
