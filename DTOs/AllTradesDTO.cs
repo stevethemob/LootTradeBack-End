@@ -10,11 +10,24 @@ namespace LootTradeDTOs
     {
         public AllTradesDTO() 
         { 
-            TradeIds = new List<int>();
-            TraderUsernames = new List<string>();
+            tradeIds = new List<int>();
+            traderUsername = new List<string>();
         }
-        public List<int> TradeIds;
 
-        public List<string> TraderUsernames;
+        private List<int> tradeIds;
+
+        public List<int> TradeIds
+        {
+            get => tradeIds;
+            set => tradeIds = value;
+        }
+
+        private List<string> traderUsername;
+
+        public List<string> TraderUsernames
+        {
+            get => traderUsername;
+            set => traderUsername = value;
+        }
     }
 }
