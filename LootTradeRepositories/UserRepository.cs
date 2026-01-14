@@ -76,7 +76,7 @@ namespace LootTradeRepositories
                 {
                     if (!reader.Read())
                     {
-                        throw new InvalidOperationException("No user found");
+                        return 0;
                     }
 
                     return reader.GetInt32("id");
