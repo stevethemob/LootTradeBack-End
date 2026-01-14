@@ -75,5 +75,21 @@ namespace LootTradeRepositories
                 }
             }
         }
+
+        public bool EditGameWithGameId(int gameId, string gameTitle)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connString))
+            {
+                conn.Open();
+                string sqlCommand = "UPDATE game SET title= @gameTitle WHERE id = @gameId";
+                MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
+                cmd.Parameters.AddWithValue("@gameId", gameId);
+                cmd.Parameters.AddWithValue("@gameTitle", gameTitle);
+
+                cmd.ExecuteNonQuery();
+            }
+
+            return true;
+        }
     }
 }

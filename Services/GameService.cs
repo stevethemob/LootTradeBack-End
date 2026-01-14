@@ -39,5 +39,10 @@ namespace LootTradeServices
 
             return gameRepository.AddGame(gameTitle);
         }
+
+        public bool EditGameWithGameId(int gameId, string gameTitle)
+        {
+            return gameRepository.EditGameWithGameId(gameId, gameTitle);
+        }
     }
 }

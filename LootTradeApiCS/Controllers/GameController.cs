@@ -43,5 +43,17 @@ namespace LootTradeApiCS.Controllers
 
             return Ok();
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("{gameId}/{gameTitle}")]
+        public IActionResult EditGame(int gameId, string gameTitle)
+        {
+            if (!gameService.EditGameWithGameId(gameId, gameTitle))
+            {
+                return StatusCode(404, "gameId not found");
+            }
+
+            return Ok();
+        }
     }
 }

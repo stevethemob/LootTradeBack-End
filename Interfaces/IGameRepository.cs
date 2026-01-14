@@ -12,5 +12,7 @@ namespace LootTradeInterfaces
         public List<GameDTO> GetAllGames();
         public bool AddGame(string gameTitle);
         public bool GameExistsWithTitle(string gameTitle);
+
+        public bool EditGameWithGameId(int gameId, string gameTitle);
     }
 }
