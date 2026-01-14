@@ -185,6 +185,7 @@ namespace LootTradeRepositories
         public bool AcceptTrade(int tradeId)
         { 
             int offeredId = GetOfferedIdByTradeId(tradeId);
+            CheckIfTradeIsAlreadyAccepted(offeredId);
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
@@ -217,6 +218,26 @@ namespace LootTradeRepositories
                     int id = reader.GetInt32("offeredId");
 
                     return id;
+                }
+            }
+        }
+
+        private bool CheckIfTradeIsAlreadyAccepted(int offeredId)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connString))
+            {
+                conn.Open();
+                string sqlCommand = "SELECT id FROM accepted_trade WHERE offeredId = @offeredId";
+                MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
+                cmd.Parameters.AddWithValue("@offeredId", offeredId);
+
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (!reader.Read())
+                    {
+                        return false;
+                    }
+                    return true;
                 }
             }
         }
