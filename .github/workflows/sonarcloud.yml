@@ -26,12 +26,12 @@ jobs:
           --health-retries=10
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e1148
         with:
           fetch-depth: 0
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@0e3b18c
         with:
           dotnet-version: '8.0.x'
 
@@ -39,11 +39,13 @@ jobs:
         run: dotnet tool install --global dotnet-sonarscanner
 
       - name: Begin SonarCloud analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           dotnet sonarscanner begin \
             /k:stevethemob_LootTradeBack-End \
             /o:stevethemob \
-            /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \
+            /d:sonar.token=$SONAR_TOKEN \
             /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
 
       - name: Restore
@@ -73,19 +75,21 @@ jobs:
             < IntegrationTests/mysql-init/loot_tradeDatabaseStructure1.mysql.sql
 
       - name: Run tests with coverage (Unit + Integration)
-        run: |
-          dotnet test \
-            /p:CollectCoverage=true \
-            /p:CoverletOutput=./TestResults/ \
-            /p:CoverletOutputFormat=opencover
         env:
           MYSQL_HOST: 127.0.0.1
           MYSQL_PORT: 3306
           MYSQL_USER: loottrade_test
           MYSQL_PASSWORD: testpassword
+        run: |
+          dotnet test \
+            /p:CollectCoverage=true \
+            /p:CoverletOutput=./TestResults/ \
+            /p:CoverletOutputFormat=opencover
 
       - name: Debug coverage files
         run: find . -name "coverage.opencover.xml" -print
 
       - name: End SonarCloud analysis
-        run: dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: dotnet sonarscanner end /d:sonar.token=$SONAR_TOKEN
