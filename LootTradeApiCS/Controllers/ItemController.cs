@@ -74,6 +74,8 @@ namespace LootTradeApiCS.Controllers
         }
 
         [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(void), 200)]
+        [ProducesResponseType(typeof(string), 500)]
         [HttpPut("editItem")]
         public IActionResult editItem([FromBody] Item item)
         {

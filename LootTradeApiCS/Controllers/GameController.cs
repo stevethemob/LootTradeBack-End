@@ -32,6 +32,7 @@ namespace LootTradeApiCS.Controllers
         }
 
         [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(string), 500)]
         [HttpPost("{gameTitle}")]
         public IActionResult AddGame(string gameTitle) 
         {
@@ -45,6 +46,8 @@ namespace LootTradeApiCS.Controllers
         }
 
         [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(void), 200)]
+        [ProducesResponseType(typeof(string), 404)]
         [HttpPut("{gameId}/{gameTitle}")]
         public IActionResult EditGame(int gameId, string gameTitle)
         {
@@ -57,6 +60,7 @@ namespace LootTradeApiCS.Controllers
         }
 
         [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(Game), 200)]
         [HttpGet("{gameId}")]
         public IActionResult GetGameById(int gameId)
         {

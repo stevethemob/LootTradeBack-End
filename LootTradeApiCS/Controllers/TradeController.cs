@@ -19,6 +19,8 @@ namespace LootTradeApiCS.Controllers
         }
 
         [Authorize]
+        [ProducesResponseType(typeof(string), 500)]
+        [ProducesResponseType(typeof(void), 200)]
         [HttpPost("AddTradeOffer")]
         public IActionResult AddTradeOffer([FromBody] TradeRequest request)
         {
@@ -37,6 +39,7 @@ namespace LootTradeApiCS.Controllers
         }
 
         [Authorize]
+        [ProducesResponseType(typeof(AllTrades), 200)]
         [HttpGet("GetAllTradesByGameId/{gameId}")]
         public IActionResult GetAllTradesByUserIdAndGameId(int gameId)
         {
@@ -49,6 +52,7 @@ namespace LootTradeApiCS.Controllers
             return Ok(allTrades);
         }
 
+        [ProducesResponseType(typeof(Trade), 200)]
         [HttpGet("ByTradeId/{tradeId}")]
         public IActionResult GetTradeById(int tradeId)
         {
@@ -58,6 +62,8 @@ namespace LootTradeApiCS.Controllers
         }
 
         [Authorize]
+        [ProducesResponseType(typeof(string), 500)]
+        [ProducesResponseType(typeof(void), 200)]
         [HttpPost("AcceptTradeByTradeId/{tradeId}")]
         public IActionResult AcceptTrade(int tradeId)
         {
@@ -76,6 +82,8 @@ namespace LootTradeApiCS.Controllers
         }
 
         [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(List<TradeAdmin>), 200)]
+        [ProducesResponseType(typeof(string), 404)]
         [HttpGet("GetAllTradesByGameIdAdmin/{gameId}")]
         public IActionResult GetAllTradesByGameId(int gameId)
         {

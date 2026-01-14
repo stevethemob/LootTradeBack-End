@@ -105,6 +105,8 @@ namespace LootTradeApiCS.Controllers
         }
 
         [Authorize]
+        [ProducesResponseType(typeof(string), 200)]
+        [ProducesResponseType(typeof(string), 500)]
         [HttpDelete("DeleteByOfferId/{offerId}")]
         public IActionResult DeleteOfferById(int offerId)
         {
@@ -123,6 +125,8 @@ namespace LootTradeApiCS.Controllers
         }
 
         [Authorize]
+        [ProducesResponseType(typeof(string), 400)]
+        [ProducesResponseType(typeof(List<AllOffers>), 200)]
         [HttpGet("GetAllOffersByFromSpecificUserByGameId/{gameId}")]
         public IActionResult GetAllOffersByUserId(int gameId)
         {
@@ -155,7 +159,7 @@ namespace LootTradeApiCS.Controllers
             return Ok(allOffers);
         }
 
-
+        [ProducesResponseType(typeof(List<AllOffers>), 200)]
         [HttpGet("GetOfferDetailsByOfferId/{offerId}")]
         public IActionResult GetOfferDetailsByOfferId(int offerId)
         {
