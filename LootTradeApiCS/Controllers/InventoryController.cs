@@ -26,6 +26,11 @@ namespace LootTradeApiCS.Controllers
         {
             Claim? userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId");
 
+            if (userIdClaim == null)
+            {
+                return Unauthorized("User Id not found in token.");
+            }
+
             int userId = int.Parse(userIdClaim.Value);
 
             Inventory inventory = inventoryService.GetInventoryByUserIdAndGameId(userId, gameId);
@@ -46,6 +51,11 @@ namespace LootTradeApiCS.Controllers
         public IActionResult AddItemToUserTheirInventoryByUserIdAndItemId(int itemId)
         {
             Claim? userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId");
+
+            if (userIdClaim == null)
+            {
+                return Unauthorized("User Id not found in token.");
+            }
 
             int userId = int.Parse(userIdClaim.Value);
 

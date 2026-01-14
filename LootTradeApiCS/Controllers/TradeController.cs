@@ -26,6 +26,11 @@ namespace LootTradeApiCS.Controllers
         {
             Claim? userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId");
 
+            if (userIdClaim == null)
+            {
+                return Unauthorized("User Id not found in token.");
+            }
+
             int traderId = int.Parse(userIdClaim.Value);
 
             bool succes = tradeService.AddTradeOffer(request.OfferId, request.ItemIds, traderId);
@@ -44,6 +49,11 @@ namespace LootTradeApiCS.Controllers
         public IActionResult GetAllTradesByUserIdAndGameId(int gameId)
         {
             Claim? userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId");
+
+            if (userIdClaim == null)
+            {
+                return Unauthorized("User Id not found in token.");
+            }
 
             int userId = int.Parse(userIdClaim.Value);
 
@@ -68,6 +78,11 @@ namespace LootTradeApiCS.Controllers
         public IActionResult AcceptTrade(int tradeId)
         {
             Claim? userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId");
+
+            if (userIdClaim == null)
+            {
+                return Unauthorized("User Id not found in token.");
+            }
 
             int userId = int.Parse(userIdClaim.Value);
 

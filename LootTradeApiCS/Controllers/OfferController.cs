@@ -112,6 +112,11 @@ namespace LootTradeApiCS.Controllers
         {
             Claim? userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId");
 
+            if (userIdClaim == null)
+            {
+                return Unauthorized("User Id not found in token.");
+            }
+
             int userId = int.Parse(userIdClaim.Value);
 
             bool success = offerService.DeleteOfferById(userId, offerId);
@@ -131,6 +136,11 @@ namespace LootTradeApiCS.Controllers
         public IActionResult GetAllOffersByUserId(int gameId)
         {
             Claim? userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId");
+
+            if (userIdClaim == null)
+            {
+                return Unauthorized("User Id not found in token.");
+            }
 
             int userId = int.Parse(userIdClaim.Value);
 
