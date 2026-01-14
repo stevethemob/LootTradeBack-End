@@ -25,5 +25,7 @@ EXPOSE 8080
 
 ENV ASPNETCORE_URLS=http://+:8080
 
+USER app
+
 COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "LootTradeApiCS.dll"]
