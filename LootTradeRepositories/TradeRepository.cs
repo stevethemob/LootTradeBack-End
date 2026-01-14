@@ -185,7 +185,11 @@ namespace LootTradeRepositories
         public bool AcceptTrade(int tradeId)
         { 
             int offeredId = GetOfferedIdByTradeId(tradeId);
-            CheckIfTradeIsAlreadyAccepted(offeredId);
+            if (CheckIfTradeIsAlreadyAccepted(offeredId))
+            {
+                return false;
+            }
+
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
