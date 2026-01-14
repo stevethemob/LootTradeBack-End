@@ -19,7 +19,7 @@ namespace LootTradeApiCS.Controllers
         }
 
         [Authorize]
-        [HttpGet("{userId}/{gameId}")]
+        [HttpGet("{gameId}")]
         [ProducesResponseType(typeof(List<Item>), 200)]
         [ProducesResponseType(typeof(string), 404)]
         public IActionResult GetInventoryByUserId(int gameId)
@@ -38,12 +38,17 @@ namespace LootTradeApiCS.Controllers
             return Ok(inventory.Items);
         }
 
-        [HttpPost("{userId}/{itemId}")]
+        [Authorize]
+        [HttpPost("{itemId}")]
         [ProducesResponseType(typeof(string), 201)]
         [ProducesResponseType(typeof(string), 400)]
         [ProducesResponseType(typeof(string), 500)]
-        public IActionResult AddItemToUserTheirInventoryByUserIdAndItemId(int userId, int itemId)
+        public IActionResult AddItemToUserTheirInventoryByUserIdAndItemId(int itemId)
         {
+            Claim? userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId");
+
+            int userId = int.Parse(userIdClaim.Value);
+
             if (itemId == 0 || userId == 0)
             {
                 return BadRequest("itemId or userId was 0.");
