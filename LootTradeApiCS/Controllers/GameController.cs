@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using LootTradeDomainModels;
 using LootTradeServices;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LootTradeApiCS.Controllers
 {
@@ -28,6 +29,19 @@ namespace LootTradeApiCS.Controllers
             }
 
             return Ok(games);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("{gameTitle}")]
+        public IActionResult AddGame(string gameTitle) 
+        {
+
+            if (!gameService.AddGame(gameTitle))
+            {
+                return StatusCode(500, "adding the game failed");
+            }
+
+            return Ok();
         }
     }
 }

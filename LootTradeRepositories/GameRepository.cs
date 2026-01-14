@@ -39,5 +39,41 @@ namespace LootTradeRepositories
             }
             return gameDTOs;
         }
+
+        public bool AddGame(string gameTitle)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connString))
+            {
+                conn.Open();
+                string sqlCommand = "INSERT INTO game(title) VALUES(@gameTitle);";
+                MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
+                cmd.Parameters.AddWithValue("@gameTitle", gameTitle);
+
+                cmd.ExecuteNonQuery();
+            }
+
+            return false;
+        }
+
+        public bool GameExistsWithTitle(string gameTitle)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connString))
+            {
+                conn.Open();
+                string sqlCommand = "SELECT title FROM game WHERE title = @gameTitle";
+                MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
+                cmd.Parameters.AddWithValue("@gameTitle", gameTitle);
+
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return true;
+                    }
+
+                    return false;
+                }
+            }
+        }
     }
 }

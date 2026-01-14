@@ -10,5 +10,7 @@ namespace LootTradeInterfaces
     public interface IGameRepository
     {
         public List<GameDTO> GetAllGames();
+        public bool AddGame(string gameTitle);
+        public bool GameExistsWithTitle(string gameTitle);
     }
 }

@@ -29,5 +29,15 @@ namespace LootTradeServices
 
             return games;
         }
+
+        public bool AddGame(string gameTitle)
+        {
+            if (gameRepository.GameExistsWithTitle(gameTitle))
+            {
+                return false;
+            }
+
+            return gameRepository.AddGame(gameTitle);
+        }
     }
 }
