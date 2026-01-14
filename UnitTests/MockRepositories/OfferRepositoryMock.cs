@@ -43,5 +43,26 @@ namespace UnitTests.MockRepositories
 
             return offerDTOs;
         }
+
+        public bool DeleteOfferById(int offerId)
+        {
+            return true;
+        }
+
+        public bool CheckIfOfferIsBySameUser(int userId, int offerId)
+        {
+            return false;
+        }
+
+        public List<OfferDTO> GetAllOffersOfSpecificUserByUserIdAndGameId(int userId, int gameId)
+        {
+            return new List<OfferDTO>();
+        }
+
+        public OfferDTO GetOfferDetailsByOfferId(int offerId)
+        {
+            return new OfferDTO();
+        }
+
     }
 }
