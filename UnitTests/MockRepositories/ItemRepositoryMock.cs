@@ -28,7 +28,7 @@ namespace UnitTests.MockRepositories
             return items;
         }
 
-        public bool CreateItem(string itemName, string itemDescription)
+        public bool CreateItem(int gameId, string itemName, string itemDescription)
         {
             return true;
         }

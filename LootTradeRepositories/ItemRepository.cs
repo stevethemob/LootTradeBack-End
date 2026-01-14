@@ -1,6 +1,8 @@
 ﻿using LootTradeDTOs;
 using LootTradeInterfaces;
 using MySql.Data.MySqlClient;
+using Org.BouncyCastle.Bcpg.OpenPgp;
+using System.Security.Cryptography;
 
 namespace LootTradeRepositories
 {
@@ -38,8 +40,20 @@ namespace LootTradeRepositories
                 }
             }
         }
-        public bool CreateItem(string itemName, string itemDescription)
+        public bool CreateItem(int gameId, string itemName, string itemDescription)
         {
+            using (MySqlConnection conn = new MySqlConnection(connString))
+            {
+                conn.Open();
+
+                string sqlCommand = "INSERT INTO item(gameId, name, description) VALUES(@gameId, @itemName, @itemDescription)";
+                MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
+                cmd.Parameters.AddWithValue("@gameId", gameId);
+                cmd.Parameters.AddWithValue("@itemName", itemName);
+                cmd.Parameters.AddWithValue("@itemDescription", itemDescription);
+
+                cmd.ExecuteNonQuery();
+            }
             return true;
         }
 

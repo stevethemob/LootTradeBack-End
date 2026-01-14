@@ -26,9 +26,9 @@ public class ItemService
         return item;
     }
 
-    public bool CreateItem(string itemName, string itemDescription)
+    public bool CreateItem(int gameId, string itemName, string itemDescription)
     {   
-        return itemRepository.CreateItem(itemName, itemDescription);
+        return itemRepository.CreateItem(gameId, itemName, itemDescription);
     }
 
     public List<Item> GetAllItemsByGameId(int gameId)

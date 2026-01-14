@@ -51,7 +51,8 @@ namespace LootTradeApiCS.Controllers
             return Ok(items);
         }
 
-        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        [HttpPost("CreateItem")]
         [ProducesResponseType(typeof(Item), 201)]
         [ProducesResponseType(typeof(string), 400)]
         [ProducesResponseType(typeof(string), 500)]
@@ -62,14 +63,14 @@ namespace LootTradeApiCS.Controllers
                 return BadRequest("Item data is required.");
             }
 
-            bool succes = itemService.CreateItem(item.Name, item.Description);
+            bool succes = itemService.CreateItem(item.GameId, item.Name, item.Description);
 
             if (!succes)
             {
                 return StatusCode(500, "Failed to create item.");
             }
 
-            return CreatedAtAction(nameof(GetItemById), new { id = item.Id }, item);
+            return StatusCode(201);
         }
 
         [Authorize(Roles = "Admin")]
