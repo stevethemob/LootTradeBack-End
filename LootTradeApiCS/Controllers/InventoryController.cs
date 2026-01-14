@@ -1,7 +1,9 @@
 ﻿using LootTradeDomainModels;
 using LootTradeServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace LootTradeApiCS.Controllers
 {
@@ -16,11 +18,16 @@ namespace LootTradeApiCS.Controllers
             this.inventoryService = inventoryService;
         }
 
+        [Authorize]
         [HttpGet("{userId}/{gameId}")]
         [ProducesResponseType(typeof(List<Item>), 200)]
         [ProducesResponseType(typeof(string), 404)]
-        public IActionResult GetInventoryByUserId(int userId, int gameId)
+        public IActionResult GetInventoryByUserId(int gameId)
         {
+            Claim? userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId");
+
+            int userId = int.Parse(userIdClaim.Value);
+
             Inventory inventory = inventoryService.GetInventoryByUserIdAndGameId(userId, gameId);
 
             if (inventory == null)
