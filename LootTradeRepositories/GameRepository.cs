@@ -23,7 +23,7 @@ namespace LootTradeRepositories
                 string sqlCommand = "SELECT * FROM game";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
 
-                using(MySqlDataReader reader = cmd.ExecuteReader())
+                using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
@@ -90,6 +90,29 @@ namespace LootTradeRepositories
             }
 
             return true;
+        }
+
+        public GameDTO GetGameByGameId(int gameId)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connString))
+            {
+                conn.Open();
+                string sqlCommand = "SELECT * FROM game WHERE id = @gameId";
+                MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
+                cmd.Parameters.AddWithValue("@gameId", gameId);
+
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (!reader.Read())
+                    {
+                        throw new InvalidOperationException("Item with id " + gameId + " not found");
+                    }
+
+                    string gameTitle = reader.GetString("title");
+
+                    return new GameDTO(gameId, gameTitle);
+                }
+            }
         }
     }
 }

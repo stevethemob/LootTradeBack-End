@@ -55,5 +55,19 @@ namespace LootTradeApiCS.Controllers
 
             return Ok();
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("{gameId}")]
+        public IActionResult GetGameById(int gameId)
+        {
+            Game game = gameService.GetGameByGameId(gameId);
+
+            if (game == null)
+            {
+                return StatusCode(404, "game not found with id: " + gameId);
+            }
+
+            return Ok(game);
+        }
     }
 }

@@ -34,5 +34,11 @@ namespace UnitTests.MockRepositories
         {
             return true;
         }
+
+        public GameDTO GetGameByGameId(int gameId)
+        {
+            return new GameDTO(1, "gameTitle");
+        }
+
     }
 }

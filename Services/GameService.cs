@@ -44,5 +44,14 @@ namespace LootTradeServices
         {
             return gameRepository.EditGameWithGameId(gameId, gameTitle);
         }
+
+        public Game GetGameByGameId(int gameId)
+        {
+            GameDTO gameDTO = gameRepository.GetGameByGameId(gameId);
+
+            Game game = new Game(gameDTO.Id, gameDTO.Title);
+
+            return game;
+        }
     }
 }

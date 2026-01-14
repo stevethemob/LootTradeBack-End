@@ -14,5 +14,7 @@ namespace LootTradeInterfaces
         public bool GameExistsWithTitle(string gameTitle);
 
         public bool EditGameWithGameId(int gameId, string gameTitle);
+
+        public GameDTO GetGameByGameId(int gameId);
     }
 }
