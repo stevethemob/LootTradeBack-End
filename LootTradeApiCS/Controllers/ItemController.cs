@@ -14,7 +14,7 @@ namespace LootTradeApiCS.Controllers
         readonly ItemService itemService;
 
         public ItemController(ItemService itemService)
-        {   
+        {
             this.itemService = itemService;
         }
 
@@ -70,6 +70,18 @@ namespace LootTradeApiCS.Controllers
             }
 
             return CreatedAtAction(nameof(GetItemById), new { id = item.Id }, item);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("editItem")]
+        public IActionResult editItem([FromBody] Item item)
+        {
+            if (!itemService.EditItem(item))
+            {
+                return StatusCode(500, "Failed to edit item.");
+            }
+
+            return Ok();
         }
     }
 }

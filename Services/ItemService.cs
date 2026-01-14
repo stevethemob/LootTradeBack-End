@@ -51,4 +51,11 @@ public class ItemService
 
         return items;
     }
+
+    public bool EditItem(Item item)
+    {
+        ItemDTO itemDTO = new ItemDTO(item.Id, item.GameId, item.Name, item.Description );
+
+        return itemRepository.EditItem(itemDTO);
+    }
 }

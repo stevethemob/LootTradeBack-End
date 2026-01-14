@@ -8,5 +8,6 @@ namespace LootTradeInterfaces
         public bool CreateItem(string itemName, string itemDescription);
 
         public List<ItemDTO> GetAllItemsByGameId(int gameId);
+        public bool EditItem(ItemDTO item);
     }
 }

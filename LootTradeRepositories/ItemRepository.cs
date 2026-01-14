@@ -72,5 +72,22 @@ namespace LootTradeRepositories
                 return items;
             }
         }
+
+        public bool EditItem(ItemDTO item)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connString))
+            {
+                conn.Open();
+                string sqlCommand = "UPDATE item SET name = @itemName, description = @itemDescription WHERE id = @itemId;";
+                MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
+                cmd.Parameters.AddWithValue("@itemId", item.Id);
+                cmd.Parameters.AddWithValue("@itemName", item.Name);
+                cmd.Parameters.AddWithValue("@itemDescription", item.Description);
+
+                cmd.ExecuteNonQuery();
+            }
+
+            return true;
+        }
     }
 }
