@@ -26,10 +26,11 @@ namespace UnitTests.Tests
             ItemRepositoryMock itemRepositoryMock = new ItemRepositoryMock();
             ItemService itemService = new ItemService(itemRepositoryMock);
 
+            int gameId = 1;
             string itemName = "Test";
             string itemDescription = "Test";
 
-            bool success = itemService.CreateItem(itemName, itemDescription);
+            bool success = itemService.CreateItem(gameId, itemName, itemDescription);
 
             Assert.IsTrue(success);
         }

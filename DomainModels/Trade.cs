@@ -19,7 +19,7 @@ namespace LootTradeDomainModels
         }
 
         public int Id { get; set; }
-        public Item ItemOffer { get; set; }
+        public Item ItemOffer { get; set; } = null!;
 
         public List<Item> TradeOffers { get; set; }
 
