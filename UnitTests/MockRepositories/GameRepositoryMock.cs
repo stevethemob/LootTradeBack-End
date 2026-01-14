@@ -19,5 +19,20 @@ namespace UnitTests.MockRepositories
 
             return gameDTOs;
         }
+
+        public bool AddGame(string gameTitle)
+        {
+            return true;
+        }
+
+        public bool GameExistsWithTitle(string gameTitle)
+        {
+            return false;
+        }
+
+        public bool EditGameWithGameId(int gameId, string gameTitle)
+        {
+            return true;
+        }
     }
 }
