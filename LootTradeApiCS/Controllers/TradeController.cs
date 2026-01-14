@@ -74,5 +74,19 @@ namespace LootTradeApiCS.Controllers
 
             return Ok();
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("GetAllTradesByGameIdAdmin/{gameId}")]
+        public IActionResult GetAllTradesByGameId(int gameId)
+        {
+            List<TradeAdmin> trades = tradeService.GetAllTradesByGameId(gameId);
+
+            if (trades.Count == 0)
+            {
+                return StatusCode(404, "No trades were found");
+            }
+
+            return Ok(trades);
+        }
     }
 }

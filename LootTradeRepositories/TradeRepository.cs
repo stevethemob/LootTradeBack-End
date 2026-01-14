@@ -72,7 +72,7 @@ namespace LootTradeRepositories
             {
                 conn.Open();
                 string sqlCommand = "SELECT id FROM inventory WHERE itemId = @itemId AND userId = @traderId";
-                MySqlCommand cmd = new MySqlCommand( sqlCommand, conn);
+                MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
                 cmd.Parameters.AddWithValue("@itemId", itemId);
                 cmd.Parameters.AddWithValue("@traderId", traderId);
 
@@ -183,7 +183,7 @@ namespace LootTradeRepositories
         }
 
         public bool AcceptTrade(int tradeId)
-        { 
+        {
             int offeredId = GetOfferedIdByTradeId(tradeId);
             if (CheckIfTradeIsAlreadyAccepted(offeredId))
             {
@@ -213,7 +213,7 @@ namespace LootTradeRepositories
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
                 cmd.Parameters.AddWithValue("@tradeId", tradeId);
 
-                using(MySqlDataReader reader = cmd.ExecuteReader())
+                using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
                     if (!reader.Read())
                     {
@@ -266,6 +266,33 @@ namespace LootTradeRepositories
                     return true;
                 }
             }
+        }
+
+        public List<TradeAdminDTO> GetAllTradesByGameId(int gameId)
+        {
+            List<TradeAdminDTO> trades = new List<TradeAdminDTO>();
+
+            using (MySqlConnection conn = new MySqlConnection(connString))
+            {
+                conn.Open();
+                string sqlCommand = "SELECT Trade.id AS tradeId, offerer.username AS offererName, trader.username AS traderName FROM Trade JOIN Offered ON Trade.offeredId = Offered.id JOIN Inventory offerInv ON Offered.inventoryId = offerInv.id JOIN User offerer ON offerInv.userId = offerer.id JOIN Trade_Item ON Trade_Item.tradeId = Trade.id JOIN Inventory tradeInv ON Trade_Item.inventoryId = tradeInv.id JOIN User trader ON tradeInv.userId = trader.id JOIN Item ON offerInv.itemId = Item.id JOIN Game ON Item.gameId = Game.id WHERE Game.id = @gameId;";
+                MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
+                cmd.Parameters.AddWithValue("@gameId", gameId);
+
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        trades.Add(new TradeAdminDTO(
+                            reader.GetInt32("tradeId"),
+                            reader.GetString("offererName"),
+                            reader.GetString("traderName")
+                        ));
+                    }
+                }
+            }
+
+            return trades;
         }
     }
 }

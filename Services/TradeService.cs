@@ -64,5 +64,20 @@ namespace LootTradeServices
 
             return false;
         }
+
+        public List<TradeAdmin> GetAllTradesByGameId(int gameId)
+        {
+            List<TradeAdminDTO> tradeDTOs = tradeRepository.GetAllTradesByGameId(gameId);
+
+            List<TradeAdmin> trades = new List<TradeAdmin>();
+
+            foreach(TradeAdminDTO tradeDTO in tradeDTOs)
+            {
+                TradeAdmin trade = new TradeAdmin(tradeDTO.TradeId, tradeDTO.OffererName, tradeDTO.TraderName);
+                trades.Add(trade);
+            }
+
+            return trades;
+        }
     }
 }
