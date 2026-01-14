@@ -23,6 +23,6 @@ namespace LootTradeDomainModels
 
         public List<Item> TradeOffers { get; set; }
 
-        public string TraderUser { get; set; }
+        public string TraderUser { get; set; } = null!;
     }
 }
