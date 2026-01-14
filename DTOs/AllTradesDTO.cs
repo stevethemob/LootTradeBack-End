@@ -14,7 +14,7 @@ namespace LootTradeDTOs
             traderUsername = new List<string>();
         }
 
-        private List<int> tradeIds;
+        private List<int> tradeIds { get; set; }
 
         public List<int> TradeIds
         {
@@ -22,7 +22,7 @@ namespace LootTradeDTOs
             set => tradeIds = value;
         }
 
-        private List<string> traderUsername;
+        private List<string> traderUsername { get; set; }
 
         public List<string> TraderUsernames
         {
