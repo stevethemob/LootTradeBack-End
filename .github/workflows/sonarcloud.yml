@@ -84,7 +84,7 @@ jobs:
           dotnet test \
             /p:CollectCoverage=true \
             /p:CoverletOutput=./TestResults/ \
-            /p:CoverletOutputFormat=opencover
+            /p:CoverletOutputFormat=opencover \
             "/p:Include=[LootTradeServices]*,[LootTradeDTOs]*,[LootTradeDomainModels]*"
 
       - name: Debug coverage files
