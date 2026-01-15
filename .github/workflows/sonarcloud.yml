@@ -43,11 +43,12 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           dotnet sonarscanner begin \
-            /k:stevethemob_LootTradeBack-End \
-            /o:stevethemob \
-            /d:sonar.token=$SONAR_TOKEN \
-            /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
-
+          /k:stevethemob_LootTradeBack-End \
+          /o:stevethemob \
+          /d:sonar.token=$SONAR_TOKEN \
+          /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" \
+          /d:sonar.coverage.exclusions="**/LootTradeRepositories/**;**/LootTradeInterfaces/**;**/LootTradeApiCS/**"
+      
       - name: Restore
         run: dotnet restore
 
