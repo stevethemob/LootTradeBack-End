@@ -85,7 +85,7 @@ jobs:
             /p:CollectCoverage=true \
             /p:CoverletOutput=./TestResults/ \
             /p:CoverletOutputFormat=opencover
-            /p:Include="[LootTradeServices]*,[LootTradeDTOs]*,[LootTradeDomainModels]*"
+            "/p:Include=[LootTradeServices]*,[LootTradeDTOs]*,[LootTradeDomainModels]*"
 
       - name: Debug coverage files
         run: find . -name "coverage.opencover.xml" -print
