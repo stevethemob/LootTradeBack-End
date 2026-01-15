@@ -38,22 +38,22 @@ jobs:
       - name: Install SonarScanner
         run: dotnet tool install --global dotnet-sonarscanner
 
+      - name: Restore
+        run: dotnet restore
+
       - name: Begin SonarCloud analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           dotnet sonarscanner begin \
-          /k:stevethemob_LootTradeBack-End \
-          /o:stevethemob \
-          /d:sonar.token=$SONAR_TOKEN \
-          /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" \
-          /d:sonar.coverage.exclusions="**/LootTradeRepositories/**;**/LootTradeInterfaces/**;**/LootTradeApiCS/**"
-      
-      - name: Restore
-        run: dotnet restore
+            /k:stevethemob_LootTradeBack-End \
+            /o:stevethemob \
+            /d:sonar.token=$SONAR_TOKEN \
+            /d:sonar.cs.opencover.reportsPaths="**/TestResults/coverage.opencover.xml" \
+            /d:sonar.coverage.exclusions="LootTradeRepositories/**/*.cs,LootTradeInterfaces/**/*.cs,LootTradeApiCS/**/*.cs"
 
       - name: Build
-        run: dotnet build --no-restore
+        run: dotnet build
 
       - name: Wait for MySQL
         run: |
@@ -81,7 +81,13 @@ jobs:
           MYSQL_PORT: 3306
           MYSQL_USER: loottrade_test
           MYSQL_PASSWORD: testpassword
-        run: dotnet test /p:CollectCoverage=true /p:CoverletOutput=./TestResults/ /p:CoverletOutputFormat=opencover "/p:Include=[LootTradeServices]*%3B[LootTradeDTOs]*%3B[LootTradeDomainModels]*"
+        run: |
+          dotnet test \
+            /p:CollectCoverage=true \
+            /p:CoverletOutput=./TestResults/coverage.opencover.xml \
+            /p:CoverletOutputFormat=opencover \
+            /p:IncludeSourceRoot=true \
+            "/p:Include=[LootTradeServices]*,[LootTradeDTOs]*,[LootTradeDomainModels]*"
 
       - name: Debug coverage files
         run: find . -name "coverage.opencover.xml" -print
