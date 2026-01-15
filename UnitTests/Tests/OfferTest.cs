@@ -52,5 +52,52 @@ namespace UnitTests.Tests
 
             Assert.IsNotNull(offers);
         }
+
+        [TestMethod]
+        public void DeleteOfferByIdTest1()
+        {
+            OfferRepositoryMock offerRepository = new OfferRepositoryMock();
+            InventoryRepositoryMock inventoryRepository = new InventoryRepositoryMock();
+
+            OfferService offerService = new OfferService(offerRepository, inventoryRepository);
+
+            int userId = 1;
+            int offerId = 1;
+
+            bool success = offerService.DeleteOfferById(userId, offerId);
+
+            Assert.IsTrue(success);
+        }
+
+        [TestMethod]
+        public void GetAllOffersOfSpecificUserByUserIdAndGameIdTest1()
+        {
+            OfferRepositoryMock offerRepository = new OfferRepositoryMock();
+            InventoryRepositoryMock inventoryRepository = new InventoryRepositoryMock();
+
+            OfferService offerService = new OfferService(offerRepository, inventoryRepository);
+
+            int userId = 1;
+            int gameId = 1;
+
+            List<Offer> offers = offerService.GetAllOffersOfSpecificUserByUserIdAndGameId(userId, gameId);
+
+            Assert.AreEqual(3, offers.Count);
+        }
+
+        [TestMethod]
+        public void GetOfferDetailsByOfferIdTest1()
+        {
+            OfferRepositoryMock offerRepository = new OfferRepositoryMock();
+            InventoryRepositoryMock inventoryRepository = new InventoryRepositoryMock();
+
+            OfferService offerService = new OfferService(offerRepository, inventoryRepository);
+
+            int offerId = 1;
+
+            Offer offer = offerService.GetOfferDetailsByOfferId(offerId);
+
+            Assert.IsNotNull(offer);
+        }
     }
 }

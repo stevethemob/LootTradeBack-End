@@ -47,5 +47,24 @@ namespace UnitTests.Tests
 
             Assert.IsNotNull(items);
         }
+
+        [TestMethod]
+        public void EditItemTest1()
+        {
+            ItemRepositoryMock itemRepositoryMock = new ItemRepositoryMock();
+            ItemService itemService = new ItemService(itemRepositoryMock);
+
+            int itemId = 1;
+            int gameId = 1;
+            string name = "Test";
+            string description = "Test";
+
+            Item item = new Item(itemId, gameId, name, description);
+
+
+            bool success = itemService.EditItem(item);
+
+            Assert.IsTrue(success);
+        }
     }
 }

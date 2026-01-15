@@ -51,17 +51,47 @@ namespace UnitTests.MockRepositories
 
         public bool CheckIfOfferIsBySameUser(int userId, int offerId)
         {
-            return false;
+            return true;
         }
 
         public List<OfferDTO> GetAllOffersOfSpecificUserByUserIdAndGameId(int userId, int gameId)
         {
-            return new List<OfferDTO>();
+            List<OfferDTO> offers = new List<OfferDTO>();
+
+            OfferDTO offer1 = new OfferDTO();
+            ItemDTO item1 = new ItemDTO(1, 1, "test", "test");
+            offer1.Item = item1;
+            offer1.Id = 1;
+            offer1.DateTimeOpen = DateTime.Now;
+
+            OfferDTO offer2 = new OfferDTO();
+            ItemDTO item2 = new ItemDTO(2, 1, "test", "test");
+            offer2.Item = item2;
+            offer2.Id = 2;
+            offer2.DateTimeOpen = DateTime.Now;
+
+            OfferDTO offer3 = new OfferDTO();
+            ItemDTO item3 = new ItemDTO(3, 1, "test", "test");
+            offer3.Item = item3;
+            offer3.Id = 3;
+            offer3.DateTimeOpen = DateTime.Now;
+
+            offers.Add(offer1);
+            offers.Add(offer2);
+            offers.Add(offer3);
+
+            return offers;
         }
 
         public OfferDTO GetOfferDetailsByOfferId(int offerId)
         {
-            return new OfferDTO();
+            OfferDTO offer = new OfferDTO();
+            ItemDTO item = new ItemDTO(1, 1, "test", "test");
+            offer.Item = item;
+            offer.Id = 1;
+            offer.DateTimeOpen = DateTime.Now;
+
+            return offer;
         }
 
     }
