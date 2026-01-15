@@ -47,9 +47,7 @@ jobs:
             /o:stevethemob \
             /d:sonar.token=$SONAR_TOKEN \
             /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
-            /d:sonar.coverage.exclusions="**/LootTradeRepositories/**,**/LootTradeInterfaces/**,**/LootTradeApiCS/**"
-      - name: Restore
-        run: dotnet restore
+            "/d:sonar.coverage.exclusions=**/LootTradeRepositories/**%3B**/LootTradeInterfaces/**%3B**/LootTradeApiCS/**"
 
       - name: Build
         run: dotnet build --no-restore
