@@ -80,12 +80,7 @@ jobs:
           MYSQL_PORT: 3306
           MYSQL_USER: loottrade_test
           MYSQL_PASSWORD: testpassword
-        run: |
-          dotnet test \
-            /p:CollectCoverage=true \
-            /p:CoverletOutput=./TestResults/ \
-            /p:CoverletOutputFormat=opencover \
-            "/p:Include=[LootTradeServices]*;[LootTradeDTOs]*;[LootTradeDomainModels]*"
+        run: dotnet test /p:CollectCoverage=true /p:CoverletOutput=./TestResults/ /p:CoverletOutputFormat=opencover "/p:Include=[LootTradeServices]*;[LootTradeDTOs]*;[LootTradeDomainModels]*"
 
       - name: Debug coverage files
         run: find . -name "coverage.opencover.xml" -print
