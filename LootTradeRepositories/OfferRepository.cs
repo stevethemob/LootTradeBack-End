@@ -28,7 +28,7 @@ namespace LootTradeRepositories
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
-                string sqlCommand = "INSERT INTO Offered (inventoryId, dateTimeOpen) VALUES (@inventoryId, @dateTime)";
+                string sqlCommand = "INSERT INTO offered (inventoryId, dateTimeOpen) VALUES (@inventoryId, @dateTime)";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
                 cmd.Parameters.AddWithValue("@inventoryId", inventoryId);
                 cmd.Parameters.AddWithValue("@dateTime", DateTime.Now);
@@ -45,7 +45,7 @@ namespace LootTradeRepositories
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
-                string sqlCommand = "SELECT Offered.id AS offered_id, Offered.dateTimeOpen, Item.id AS item_id, Item.gameId, Item.name, Item.description FROM Offered JOIN Inventory ON Inventory.id = Offered.inventoryId JOIN Item ON Item.id = Inventory.itemId JOIN Game ON Game.id = Item.gameId WHERE Game.id = @gameId AND NOT EXISTS (SELECT 1 FROM accepted_trade at WHERE at.OfferedId = Offered.id);";
+                string sqlCommand = "SELECT offered.id AS offered_id, offered.dateTimeOpen, item.id AS item_id, item.gameId, item.name, item.description FROM offered JOIN inventory ON inventory.id = offered.inventoryId JOIN item ON item.id = inventory.itemId JOIN game ON game.id = item.gameId WHERE game.id = @gameId AND NOT EXISTS (SELECT 1 FROM accepted_trade at WHERE at.offeredId = offered.id);";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
                 cmd.Parameters.AddWithValue("@gameId", gameId);
 
@@ -68,7 +68,7 @@ namespace LootTradeRepositories
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
-                string sqlCommand = "SELECT Offered.id AS offered_id, Offered.dateTimeOpen, Item.id AS item_id, Item.gameId, Item.name, Item.description FROM Offered JOIN Inventory ON Inventory.id = Offered.inventoryId JOIN Item ON Item.id = Inventory.itemId JOIN Game ON Game.id = Item.gameId WHERE Game.id = @gameId AND Item.name LIKE @searchQuery AND NOT EXISTS (SELECT 1 FROM accepted_trade at WHERE at.OfferedId = Offered.id);";
+                string sqlCommand = "SELECT offered.id AS offered_id, offered.dateTimeOpen, item.id AS item_id, item.gameId, item.name, item.description FROM offered JOIN inventory ON inventory.id = offered.inventoryId JOIN item ON item.id = inventory.itemId JOIN game ON game.id = item.gameId WHERE game.id = @gameId AND item.name LIKE @searchQuery AND NOT EXISTS (SELECT 1 FROM accepted_trade at WHERE at.offeredId = offered.id);";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
                 cmd.Parameters.AddWithValue("@searchQuery", $"%{searchQuery}%");
                 cmd.Parameters.AddWithValue("@gameId", gameId);
@@ -92,7 +92,7 @@ namespace LootTradeRepositories
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
-                string sqlCommand = "DELETE FROM Offered WHERE id = @offerId;";
+                string sqlCommand = "DELETE FROM offered WHERE id = @offerId;";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
                 cmd.Parameters.AddWithValue("@offerId", offerId);
                 cmd.ExecuteNonQuery();
@@ -106,7 +106,7 @@ namespace LootTradeRepositories
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
-                string sqlCommand = "SELECT 1 FROM Offered JOIN Inventory ON Offered.inventoryId = Inventory.id WHERE Offered.id = @offerId AND Inventory.userId = @userId LIMIT 1;";
+                string sqlCommand = "SELECT 1 FROM offered JOIN inventory ON offered.inventoryId = inventory.id WHERE offered.id = @offerId AND inventory.userId = @userId LIMIT 1;";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
                 cmd.Parameters.AddWithValue("@userId", userId);
                 cmd.Parameters.AddWithValue("@offerId", offerId);
@@ -125,7 +125,7 @@ namespace LootTradeRepositories
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
-                string sqlCommand = "SELECT Offered.id AS offered_id, Offered.dateTimeOpen, Item.id AS item_id, Item.gameId, Item.name, Item.description FROM Offered JOIN Inventory ON Inventory.id = Offered.inventoryId JOIN Item ON Item.id = Inventory.itemId JOIN Game ON Game.id = Item.gameId WHERE Inventory.userId = @userId AND Game.id = @gameId AND NOT EXISTS (SELECT 1 FROM accepted_trade at WHERE at.OfferedId = Offered.id);";
+                string sqlCommand = "SELECT offered.id AS offered_id, offered.dateTimeOpen, item.id AS item_id, item.gameId, item.name, item.description FROM offered JOIN inventory ON inventory.id = offered.inventoryId JOIN item ON item.id = inventory.itemId JOIN game ON game.id = item.gameId WHERE inventory.userId = @userId AND game.id = @gameId AND NOT EXISTS (SELECT 1 FROM accepted_trade at WHERE at.offeredId = offered.id);";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
                 cmd.Parameters.AddWithValue("@userId", userId);
                 cmd.Parameters.AddWithValue("@gameId", gameId);
@@ -147,7 +147,7 @@ namespace LootTradeRepositories
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
-                string sqlCommand = "SELECT Offered.id AS offered_id, Offered.dateTimeOpen, Item.id AS item_id, Item.gameId, Item.name, Item.description FROM Offered JOIN Inventory ON Inventory.id = Offered.inventoryId JOIN Item ON Item.id = Inventory.itemId JOIN Game ON Game.id = Item.gameId WHERE Offered.id = @offerId;";
+                string sqlCommand = "SELECT offered.id AS offered_id, offered.dateTimeOpen, item.id AS item_id, item.gameId, item.name, item.description FROM offered JOIN inventory ON inventory.id = offered.inventoryId JOIN item ON item.id = inventory.itemId JOIN game ON game.id = Item.gameId WHERE offered.id = @offerId;";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
                 cmd.Parameters.AddWithValue("@offerId", offerId);
 

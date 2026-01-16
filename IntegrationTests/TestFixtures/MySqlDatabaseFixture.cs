@@ -97,11 +97,37 @@ namespace LootTrade.IntegrationTests.TestFixtures
             using var conn = new MySqlConnection(ConnectionString);
             conn.Open();
 
-            var cmd = new MySqlCommand(@"
-                INSERT INTO game (title) VALUES ('Game A'), ('Game B');
-            ", conn);
+            // Seed roles
+            var cmdRoles = new MySqlCommand(@"INSERT INTO role (title) VALUES ('user'), ('admin');", conn);
+            cmdRoles.ExecuteNonQuery();
 
-            cmd.ExecuteNonQuery();
+            // Seed users
+            var cmdUsers = new MySqlCommand(@"INSERT INTO user (username, password, email, roleId) VALUES('Alice', 'password123', 'alice@example.com', 1), ('Bob', 'password123', 'bob@example.com', 2);", conn);
+            cmdUsers.ExecuteNonQuery();
+
+            // Seed games
+            var cmdGames = new MySqlCommand(@"INSERT INTO game (title) VALUES('Game A'), ('Game B');", conn);
+            cmdGames.ExecuteNonQuery();
+
+            // Seed items
+            var cmdItems = new MySqlCommand(@"INSERT INTO item (gameId, name, description) VALUES(1, 'Sword', 'A sharp sword'),(1, 'Shield', 'Protective shield'),(2, 'Bow', 'Long range bow'),(2, 'Arrow', 'Arrow for the bow');", conn);
+            cmdItems.ExecuteNonQuery();
+
+            // Seed inventory
+            var cmdInventory = new MySqlCommand(@"INSERT INTO inventory (itemId, userId) VALUES(1, 1),(2, 1),(3, 2),(4, 2);", conn);
+            cmdInventory.ExecuteNonQuery();
+
+            // Seed offered
+            var cmdOffered = new MySqlCommand(@"INSERT INTO offered (inventoryId, dateTimeOpen) VALUES(1, NOW()),(3, NOW());", conn);
+            cmdOffered.ExecuteNonQuery();
+
+            // Seed trade
+            var cmdTrade = new MySqlCommand(@"INSERT INTO trade (offeredId) VALUES(1),(2);", conn);
+            cmdTrade.ExecuteNonQuery();
+
+            // Seed trade_item
+            var cmdTradeItem = new MySqlCommand(@"INSERT INTO trade_item (tradeId, inventoryId) VALUES(1, 2),(2, 4);", conn);
+            cmdTradeItem.ExecuteNonQuery();
         }
 
         public void Dispose()

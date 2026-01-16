@@ -109,7 +109,7 @@ namespace LootTradeRepositories
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
-                string sqlCommand = "SELECT Trade.id, User.username FROM Trade JOIN Offered ON Trade.offeredId = Offered.id JOIN Inventory ON Offered.inventoryId = Inventory.id JOIN Item ON Inventory.itemId = Item.id JOIN Game ON Item.gameId = Game.id JOIN User ON Inventory.userId = User.id WHERE Inventory.userId = @userId AND Game.id = @gameId;";
+                string sqlCommand = "SELECT trade.id, user.username FROM trade JOIN offered ON trade.offeredId = offered.id JOIN inventory ON offered.inventoryId = inventory.id JOIN item ON inventory.itemId = item.id JOIN game ON item.gameId = game.id JOIN user ON inventory.userId = user.id WHERE inventory.userId = @userId AND game.id = @gameId;";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
                 cmd.Parameters.AddWithValue(Params.GameId, gameId);
                 cmd.Parameters.AddWithValue(Params.UserId, userId);
@@ -142,7 +142,7 @@ namespace LootTradeRepositories
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
-                string sqlCommand = "SELECT Trade.id AS tradeId, Item.id AS offerItemId, Item.gameId AS offerGameId, Item.name AS offerItemName, Item.description AS offerItemDescription, User.username AS tradeUsername FROM Trade JOIN Offered ON Trade.offeredId = Offered.id JOIN Inventory ON Offered.inventoryId = Inventory.id JOIN Item ON Inventory.itemId = Item.id JOIN User ON Inventory.userId = User.id WHERE Trade.id = @tradeId";
+                string sqlCommand = "SELECT trade.id AS tradeId, item.id AS offerItemId, item.gameId AS offerGameId, item.name AS offerItemName, item.description AS offerItemDescription, user.username AS tradeUsername FROM trade JOIN offered ON trade.offeredId = offered.id JOIN inventory ON offered.inventoryId = inventory.id JOIN item ON inventory.itemId = item.id JOIN user ON inventory.userId = user.id WHERE trade.id = @tradeId";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
                 cmd.Parameters.AddWithValue(Params.TradeId, tradeId);
 
@@ -170,7 +170,7 @@ namespace LootTradeRepositories
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
-                string sqlCommand = "SELECT Item.id, Item.gameId, Item.name, Item.description FROM Trade_Item JOIN Inventory ON Trade_Item.inventoryId = Inventory.id JOIN Item ON Inventory.itemId = Item.id WHERE Trade_Item.tradeId = @tradeId";
+                string sqlCommand = "SELECT item.id, item.gameId, item.name, item.description FROM trade_item JOIN inventory ON trade_item.inventoryId = inventory.id JOIN item ON inventory.itemId = item.id WHERE trade_item.tradeId = @tradeId";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
                 cmd.Parameters.AddWithValue(Params.TradeId, tradeId);
 
@@ -269,7 +269,7 @@ namespace LootTradeRepositories
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
-                string sqlCommand = "SELECT DISTINCT Trade.id AS tradeId, offerer.username AS offererName, trader.username AS traderName FROM Trade JOIN Offered ON Trade.offeredId = Offered.id JOIN Inventory offerInv ON Offered.inventoryId = offerInv.id JOIN User offerer ON offerInv.userId = offerer.id JOIN Trade_Item ti ON ti.tradeId = Trade.id JOIN Inventory tradeInv ON ti.inventoryId = tradeInv.id JOIN User trader ON tradeInv.userId = trader.id JOIN Item ON offerInv.itemId = Item.id JOIN Game ON Item.gameId = Game.id WHERE Game.id = @gameId;";
+                string sqlCommand = "SELECT DISTINCT trade.id AS tradeId, offerer.username AS offererName, trader.username AS traderName FROM trade JOIN offered ON trade.offeredId = offered.id JOIN inventory offerInv ON offered.inventoryId = offerInv.id JOIN user offerer ON offerInv.userId = offerer.id JOIN trade_item ti ON ti.tradeId = trade.id JOIN inventory tradeInv ON ti.inventoryId = tradeInv.id JOIN user trader ON tradeInv.userId = trader.id JOIN item ON offerInv.itemId = item.id JOIN game ON item.gameId = game.id WHERE game.id = @gameId;";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
                 cmd.Parameters.AddWithValue(Params.GameId, gameId);
 
