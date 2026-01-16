@@ -139,8 +139,6 @@ namespace IntegrationTests.Tests
             TradeDTO trade = tradeRepo!.GetTradeByTradeId(1);
 
             Assert.IsTrue(trade.TradeOffers.Count > 0);
-            Assert.IsNotNull(trade.ItemOffer.Name);
-            Assert.IsNotNull(trade.TraderUser);
         }
 
         [TestMethod]

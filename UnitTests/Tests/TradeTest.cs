@@ -49,7 +49,7 @@ namespace UnitTests.Tests
 
             AllTrades trades = tradeService.GetAllTradeIdsByGameIdAndUserId(gameId, userId);
 
-            Assert.AreEqual(2, trades.TradeIds.Count());
+            Assert.AreEqual(2, trades.TradeIds.Count);
         }
 
         [TestMethod]
@@ -89,7 +89,7 @@ namespace UnitTests.Tests
 
             List<TradeAdmin> trades = tradeService.GetAllTradesByGameId(gameId);
 
-            Assert.AreEqual(1, trades.Count());
+            Assert.AreEqual(1, trades.Count);
         }
     }
 }
