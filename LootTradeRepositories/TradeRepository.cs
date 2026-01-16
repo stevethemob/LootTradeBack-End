@@ -109,7 +109,7 @@ namespace LootTradeRepositories
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
-                string sqlCommand = "SELECT trade.id, user.username FROM trade JOIN offered ON trade.offeredId = offered.id JOIN inventory ON offered.inventoryId = inventory.id JOIN item ON inventory.itemId = item.id JOIN game ON item.gameId = game.id JOIN user ON inventory.userId = user.id WHERE inventory.userId = @userId AND game.id = @gameId;";
+                string sqlCommand = "SELECT DISTINCT trade.id, offerer.username FROM trade JOIN offered ON trade.offeredId = offered.id JOIN inventory offerInv ON offered.inventoryId = offerInv.id JOIN user offerer ON offerInv.userId = offerer.id JOIN trade_item ti ON ti.tradeId = trade.id JOIN inventory myInv ON ti.inventoryId = myInv.id JOIN item ON offerInv.itemId = item.id JOIN game ON item.gameId = game.id WHERE myInv.userId = @userId AND offerInv.userId != @userId AND game.id = @gameId;";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
                 cmd.Parameters.AddWithValue(Params.GameId, gameId);
                 cmd.Parameters.AddWithValue(Params.UserId, userId);
@@ -250,14 +250,19 @@ namespace LootTradeRepositories
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
-                string sqlCommand = "SELECT 1 FROM trade JOIN offered ON offered.id = trade.offeredId JOIN inventory ON inventory.id = offered.inventoryId WHERE trade.id = @tradeId AND inventory.userId = @userId";
+                string sqlCommand = "SELECT trade.id FROM trade JOIN offered ON offered.id = trade.offeredId JOIN inventory ON inventory.id = offered.inventoryId WHERE trade.id = @tradeId AND inventory.userId = @userId";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
                 cmd.Parameters.AddWithValue(Params.TradeId, tradeId);
                 cmd.Parameters.AddWithValue(Params.UserId, userId);
 
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
-                    return reader.Read();
+                    if (reader.Read())
+                    {
+                        return true;
+                    }
+
+                    return false;
                 }
             }
         }
