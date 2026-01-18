@@ -109,7 +109,7 @@ namespace LootTradeRepositories
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
-                string sqlCommand = "SELECT DISTINCT trade.id, offerer.username FROM trade JOIN offered ON trade.offeredId = offered.id JOIN inventory offerInv ON offered.inventoryId = offerInv.id JOIN user offerer ON offerInv.userId = offerer.id JOIN trade_item ti ON ti.tradeId = trade.id JOIN inventory myInv ON ti.inventoryId = myInv.id JOIN item myItem ON myInv.itemId = myItem.id JOIN game ON myItem.gameId = game.id WHERE myInv.userId = @userId AND offerInv.userId != @userId AND game.id = @gameId;";
+                string sqlCommand = "SELECT DISTINCT t.id AS tradeId, bidder.username FROM trade t JOIN trade_item ti ON ti.tradeId = t.id JOIN inventory bidInv ON ti.inventoryId = bidInv.id JOIN user bidder ON bidInv.userId = bidder.id JOIN offered o ON t.offeredId = o.id JOIN inventory offerInv ON o.inventoryId = offerInv.id JOIN item offerItem ON offerInv.itemId = offerItem.id JOIN game g ON offerItem.gameId = g.id WHERE offerInv.userId = @userId AND bidInv.userId != @userId AND g.id = @gameId;";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
                 cmd.Parameters.AddWithValue(Params.GameId, gameId);
                 cmd.Parameters.AddWithValue(Params.UserId, userId);
