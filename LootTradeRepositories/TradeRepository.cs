@@ -250,7 +250,7 @@ namespace LootTradeRepositories
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
-                string sqlCommand = "SELECT trade.id FROM trade JOIN offered ON offered.id = trade.offeredId JOIN inventory ON inventory.id = offered.inventoryId WHERE trade.id = @tradeId AND inventory.userId = @userId";
+                string sqlCommand = "SELECT 1 FROM trade t JOIN trade_item ti ON ti.tradeId = t.id JOIN inventory inv ON inv.id = ti.inventoryId WHERE t.id = @tradeId AND inv.userId = @userId LIMIT 1;";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
                 cmd.Parameters.AddWithValue(Params.TradeId, tradeId);
                 cmd.Parameters.AddWithValue(Params.UserId, userId);
