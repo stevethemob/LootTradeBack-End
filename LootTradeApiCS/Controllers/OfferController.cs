@@ -46,7 +46,6 @@ namespace LootTradeApiCS.Controllers
 
         [HttpGet("ByGameId/{gameId}")]
         [ProducesResponseType(typeof(List<AllOffers>), 200)]
-        [ProducesResponseType(typeof(string), 400)]
         public IActionResult GetAllOffers(int gameId)
         {
             List<Offer> offers = offerService.GetAllOffersByGameId(gameId);
@@ -64,11 +63,6 @@ namespace LootTradeApiCS.Controllers
                 offer.Item.Description
                 );
                 allOffers.Add(offerForTransfer);
-            }
-
-            if (allOffers.Count == 0)
-            {
-                return BadRequest("gameId was not found");
             }
 
             return Ok(allOffers);
