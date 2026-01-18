@@ -147,7 +147,7 @@ namespace LootTradeRepositories
             using (MySqlConnection conn = new MySqlConnection(connString))
             {
                 conn.Open();
-                string sqlCommand = "SELECT offered.id AS offered_id, offered.dateTimeOpen, item.id AS item_id, item.gameId, item.name, item.description FROM offered JOIN inventory ON inventory.id = offered.inventoryId JOIN item ON item.id = inventory.itemId JOIN game ON game.id = Item.gameId WHERE offered.id = @offerId;";
+                string sqlCommand = "SELECT offered.id AS offered_id, offered.dateTimeOpen, item.id AS item_id, item.gameId, item.name, item.description FROM offered JOIN inventory ON inventory.id = offered.inventoryId JOIN item ON item.id = inventory.itemId JOIN game ON game.id = item.gameId WHERE offered.id = @offerId;";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
                 cmd.Parameters.AddWithValue("@offerId", offerId);
 
