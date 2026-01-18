@@ -50,6 +50,9 @@ builder.Services.AddCors(options =>
         policy.WithOrigins("http://localhost:5173")
               .AllowAnyHeader()
               .AllowAnyMethod();
+        policy.WithOrigins("http://frontend")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
     });
 });
 
@@ -72,7 +75,7 @@ builder.Services.AddTransient<IUserRepository>(_ =>
 });
 
 builder.Services.AddTransient<GameService>(p =>
-{ 
+{
     var gameRepository = p.GetRequiredService<IGameRepository>();
     return new GameService(gameRepository);
 });
